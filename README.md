@@ -1,4 +1,4 @@
-# Introducción al lenguaje <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brand/r-project.svg" width="50" height="50"> para la investigación en Ciencias de la Salud
+# Introducción al lenguaje <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/brands/r-project.svg" width="50" height="50"> para la investigación en Ciencias de la Salud
 
 ## :teacher: Docentes:
 
@@ -20,8 +20,8 @@ Para usar R, trabajaremos principalmente dentro del entorno GUI de [RStudio](htt
 
 ## :calendar: Programación del curso
 
-0. Presentación (PDF)
-1. Introducción a R (HTML)(PDF)
+0. Presentación ([PDF](https://github.com/chrglez/slidescursoessscan/blob/main/Presentaci%C3%B3n/Presentaci%C3%B3n.pdf))
+1. Introducción a R ([HTML](https://raw.githack.com/chrglez/slidescursoessscan/main/Modulo%201/modulo1.html))(PDF)
 2. Análisis estadístico básico en R.
 3. Análisis gráfico con R.
 4. Aplicaciones de R en epidimiología.
