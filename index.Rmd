@@ -1,0 +1,1262 @@
+---
+title: "R ESTADÍSTICAS"
+
+author: "Jaime Pinilla - C. González-Martel"
+date: "03/10/2022"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    lib_dir: libs
+    css: ["rutgers", "rutgers-fonts", "./custom.css"]
+    nature:
+      beforeInit: "js/ru_xaringan.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "4:3"
+
+    includes:
+      in_header: "header.html"
+
+---
+
+# Introducción a R
+
+
+1. [Instalación y primeros pasos con R.](/index.html#3)
+
+2. [Tipos de objetos: vectores, matrices, data frames y listas.](/index.html#12)
+
+3. [Data Frames:Manejo de ficheros o conjuntos de datos.](/index.html#56)
+
+4. [Creación de funciones.](/index.html#71)
+
+5. [Instalación y trabajo con paquetes.](/index.html#92)
+
+
+
+
+---
+
+
+class:  inverse, center, middle
+
+# Instalación y primeros pasos con R.
+
+---
+
+background-image: url(img/Queesrsoftware.jpg)
+background-size: contain
+
+class:  bottom
+
+## ¿Qué es R?
+
+---
+
+
+
+<ru-blockquote> R es un entorno y lenguaje de programación diseñado para el análisis estadístico.</ru-blockquote>
+
+* R es un ambiente de programación formado por un conjunto de herramientas muy flexibles que pueden ampliarse fácilmente mediante paquetes, librerías o mediante funciones creadas por cualquier usuario.
+
+* Es gratuito y de código abierto.
+
+* R software al ser de código abierto no tiene restricciones en la modificación del código exceptos las propios de la licencia GPL, al contrario de lo que sucede con otras herramientas estadísticas comerciales privativas como SPSS, Matlab, etc.
+
+* Es un lenguaje orientado a objetos.
+
+* Es un lenguaje interpretado.
+
+---
+
+background-image: url(img/RStudio.png)
+background-size: cover
+
+class: bottom
+
+# RStudio
+
+
+
+---
+
+# RStudio
+
+<ru-blockquote> RStudio es un entorno de desarrollo integral (IDE en su siglas en inglés) para R.</ru-blockquote>
+
+* Incluye consola, editor con resaltado de sintaxis que soporta ejecución directa del código además de herramientas para gestión de gráficos, historial de comandos, depuración de código y espacio de trabajo.
+
+* Es de código abierto y existen vesriones para los diferentes sistemas operativos (Windoes, Mac y Linux) 
+
+---
+
+background-image: url(img/both.png)
+background-position: 50% 15%
+background-size: 450pt
+
+class: middle
+
+# Instalación
+
+.pull-left[
+### R
+
+* [Web de R](https://www.r-project.org/)
+
+* [Link de descarga](https://cran.r-project.org/bin/windows/base/).
+
+]
+
+.pull-right[
+### RStudio
+
+* [Web de RStudio](https://www.rstudio.com/)
+
+* [Link de descarga](https://www.rstudio.com/products/rstudio/download/).
+
+]
+
+---
+
+
+background-image: url(img/rstudio-300x260.png)
+background-position: 50% 50%
+background-size: 450pt
+
+
+
+---
+
+
+background-image: url(img/hadley.png)
+background-position: 50% 55%
+background-size: 450pt
+
+<blockquote class="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">I google for <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> code all the time! <a href="https://t.co/XDzuvqkJCK">https://t.co/XDzuvqkJCK</a></p>&mdash; Hadley Wickham (@hadleywickham) <a href="https://twitter.com/hadleywickham/status/757919786344984577?ref_src=twsrc%5Etfw">26 de julio de 2016</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+---
+
+background-size: 100%
+background-image: url(https://media.giphy.com/media/2juvZoQ3oLa4U/giphy.gif)
+
+
+---
+
+class:  inverse, center, middle
+
+# Tipos de objetos: vectores, listas, matrices, y data frames.
+
+---
+
+# Ejecución de nuestro primer código
+
+En su forma más básica R funciona como una calculadora.
+
+## Ejemplo
+
+En la consola introducir el siguiente código:
+
+```{r eval = FALSE, message=FALSE, warning=FALSE}
+3 + 4
+```
+
+## Ejercicio
+
+* Calcular `12 * 3`
+
+
+---
+# Operadores aritméticos
+
+* Suma: `+`
+
+* Resta: `-`
+
+* Multiplicación:`*`
+
+* División:`/`
+
+* Potencia: `^`
+
+* Módulo: `%%`
+
+## Ejercicio
+
+* De nuevo usando la consola, calcular si `13` es par o impar mediante el operador módulo `%%`
+
+---
+
+# Variables
+
+Un concepto fundamental en los lenguajes de programación es el de **variable**.
+
+Una variable permite almacenar un valor o un objeto en R. Se puede acceder al valor o al objeto almacenado en esa variable mediante el nombre de la variable.
+
+---
+
+## Ejemplo
+
+Para asignar el valor `4` a la variable `x` se puede usar el operador asignación `<-` (se puede usar también `=`)
+
+```{r message=FALSE, warning=FALSE}
+x <- 4
+```
+
+Para acceder al valor almacenado en `x` debemos escribir el nombre de la variable en la consola
+
+```{r, eval=FALSE}
+x
+```
+
+R nos devuelve en consola el valor almacenado en `x` que en este caso es `4`
+
+```{r, echo = FALSE}
+x
+```
+
+---
+background-image: url(img/motion.gif)
+background-size: 150pt
+background-position: 85% 30%
+
+
+# Establecer la carpeta de trabajo
+
+.left[
+* Vía menú
+
+    * Ir a la pestaña `Files`
+    
+    * Hacer click en `...` (Go to directory)
+    
+    * Seleccionar directorio
+    
+    * Hacer click en la subestaña con la rueda dentada `More`
+    
+    * Hacer click en ` Set AS Working Directory`
+
+* Vía comando de R
+
+```{r eval = FALSE}
+setwd('c:/establecer/carpeta/de/trabajo')
+```
+
+* Vía proyecto
+
+    * `File`, `New Project`. Cuando esté creado se puede acceder al proyecto con `File`, `Open Project`.
+]
+---
+# Editor de R
+
+* Se puede escribir el código en un editor de texto (cualquiera) para tenerlo guardado en caso de querer ejecutarlo en futuras sesiones.
+
+* RStudio tiene incorporado un editor con multiples funcionalidades:
+
+    * **Manejo de ficheros**. Creación de un fichero `script` con `File, New File`
+    
+    * **Autocompletado de código**
+    
+    * **Búsqueda y reemplazo**
+    
+    * **Comentar en el código** con `#`
+    
+    * **Ejecución de código** con `Ctrl+Enter`
+
+---
+
+# Ejemplo
+
+Asignar el valor `4` a la variable `x`. Asignar el valor `5` a la variable `y`. Sumar ambos valores y asignar el resultado a la variable `suma`. Comprobar el resultado visualizando el valor de `suma`
+
+```{r eval = FALSE}
+
+# Asignar el valor `4` a la variable `x`. Asignar el valor `5` a la variable `y`.
+# Sumar ambos valores y asignar el resultado a la variable `suma`.
+# Comprobar el resultado visualizando el valor de `suma`
+
+
+x <- 4
+y <- 5
+suma <- x + y
+suma
+```
+
+Escribir el código en el editor (o copiarlo desde este documento), seleccionar el código y ejecutarlo con `Ctrl+Enter` (también se puede ejecutar línea por línea). El resultado de la ejecución del código se podrá ir viendo por la consola a medida que se ejecuta. 
+
+```{r echo = FALSE}
+
+x <- 4
+y <- 5
+suma <- x
+suma
+```
+
+Se puede guardar el código anterior a través del menú `File`, `Save`. Se puede recuperar en otra sesión con `File`, `Open`
+---
+# Tipos de datos básicos en R
+
+* Numérico `num`: `3.4`
+
+* Entero `int`: `3L`
+
+* Lógico `logi`: `TRUE`
+
+* Texto (*string*) `chr`: `'char'` 
+
+Con la función `class(x)` se puede obtener el tipo de dato de la variable u objeto `x`
+
+---
+
+## Ejemplo
+
+Asignar a las variables `numerico`, `logico`, `texto` los valores `3.4`, `TRUE`, `curso`. Mediante la función `class(x)` obtener el tipo de las variables anteriores. Finalmente sumar `numerico` más `texto` (sin asignárselo a ninguna variable) y sumar `numerico` más `logico`
+
+```{r error = TRUE}
+#Asignar a las variables `numerico`, `logico`, `texto` los valores `3.4`, `FALSE`, `curso`. Mediante la función `class(x)` obtener el tipo de las variables anteriores. Finalmente sumar `numerico` más `texto` (sin asignárselo a ninguna variable) y sumar `numerico` más `logico`
+
+numerico <- 3.4
+logico <- TRUE
+texto <- "curso"
+numerico + texto
+numerico + logico
+```
+
+
+---
+class: middle, center
+
+# Vectores
+
+---
+
+<ru-blockquote>Los vectores son *arrays* unidimensionales. Es un agrupamiento de valores de un mismo tipo. Se declaran con la función `c()`</ru-blockquote>
+
+## Ejemplo
+
+Asignar la serie de valores `1,2,3`; `TRUE, FALSE, FALSE` y `"curso", "de", "R"` a las variables `vnum`, `vlog`, `vchar`. Obtener sus clases.
+
+```{r}
+# Asignar la serie de valores `1,2,3`, `TRUE, FALSE, FALSE` y `"curso", "de", "R` a las variables `vnum`, `vlog`, `vchar`. Obtener sus clases.
+vnum <- c(1,2,3)
+vlog <- c(TRUE, FALSE, FALSE)
+vchar <- c("curso", "de", "R")
+```
+
+---
+```{r}
+class(vnum)
+class(vlog)
+class(vchar)
+```
+
+## Ejercicio
+Asignar la serie de valores `1,2,"texto"`; `1, 2, TRUE` y `"curso", "de", TRUE` a las variables `vec1`, `vec2`, `vec3`. Obtener el tipo de cada vector.
+
+
+---
+
+# Operaciones con vectores numéricos (no exhaustiva)
+
+## Ejemplos
+
+* Declarar el vector `vec1` con la serie `1,3,-5,3,-2` y el vector `vec2` con la serie `1:5`
+```{r}
+vec1 <- c(1, 3, -5, 3, 2)
+vec2 <- 1:5
+# Es equivalene a escribir vec2 <- c(1,2,3,4,5)
+# o vec2 <- seq(1,5,1)
+```
+
+* Crear un nuevo vector `uvec` que sea la combinación del vector `vec1` y `vec2` y mostar el resultado
+```{r}
+uvec <- c(vec1, vec2)
+uvec
+```
+
+---
+
+* Sumar 4 a cada elemento del vector, asignárselo a la variable `suma4` y obtener el vector resultado de la operación.
+```{r}
+suma4 <- vec1 + 4
+suma4
+```
+
+* Calcular el vector resultado de multiplicar cada elemento del vector `vec1` al elemento del vector `vec2` que ocupa la misma posición, asígnárselo a la variable `prod2` para posteriormente mostrar el resultado.
+```{r}
+prod2 <- vec1 * vec2
+prod2
+```
+
+* Calcular la suma de los elementos del vector `vec1`.
+```{r}
+sum(vec1)
+```
+
+---
+
+* Calcular el tamaño del vector `vec2`
+```{r}
+length(vec2)
+```
+
+
+
+* Calcular si los valores de `vec1` son mayores que los valores de `vec2` que ocupan la misma posición, asignarle el resultado a la variable `logico` y mostar el resultado.
+```{r}
+logico <- vec1 > vec2
+logico
+```
+
+### Comparadores
+
+* Mayor que: >
+* Menor que: <
+* Mayor o igual que: >=
+* Menor o igual que: <=
+* Igual: ==
+* Distinto: !=
+
+---
+
+# Operaciones con vectores de texto. (no exhaustiva)
+
+* Crear el vector de texto `texto1` con los valores `'curso','de','R'` y concatenar los valores de `texto1`con los de `vec1`. 
+
+```{r}
+texto1 <- c('curso', 'de', 'R')
+paste(texto1,vec1)
+```
+
+
+
+*  Concatenar los elementos del vector `texto1` para formar un único *string*.
+```{r}
+paste(texto1, collapse = " ")
+```
+
+---
+# Selección de elementos de vectores
+
+Esta operación se realiza encerrando entre corchetes la posición del elemento que queremos extraer si es único, o un vector de posiciones o un vector lógico si son varios. También se pueden nombrar los elementos del vector y seleccionar en función de su nombre.
+
+## Ejemplos
+
+* Sea el vector `vec1 <- c(1,2,-2,-5,7,12,9)` extraer el segundo elemento.
+```{r}
+vec1 <- c(1,2,-2,-5,7,12,9)
+vec1[2]
+```
+
+* Extraer el elemento 2 y 4.
+```{r}
+vec1[c(2,4)]
+```
+
+---
+
+* Nombrar los elementos del vector `vec1` como `"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"`. Seleccionar el elemento correspondiente al `miercoles`.
+```{r}
+names(vec1) <- c("lunes", "martes", "miercoles", "jueves",
+                 "viernes", "sabado", "domingo")
+vec1[c("miercoles")]
+```
+
+
+* Extraer los elementos pares del vector `vec1`.
+```{r}
+index <- vec1 %% 2 == 0
+vec1[index]
+```
+
+ 
+
+## Ejercicio
+
+* Extraer los elementos impares del vector `vec1`.
+
+---
+
+Se pueden usar valores negativos si lo que queremos hacer es seleccionar pero eliminando elementos del vector.
+
+* Seleccionar todos los elementos excepto el primer elemento del vector `vec2`.
+```{r}
+vec2[-1]
+```
+
+Las selecciones de los primeros elementos y últimos se hace con las fucniones `head()` y `tail()`
+
+* Seleccionar los primeros 5 elementos del vector `vec2`.
+```{r}
+head(vec2)
+```
+
+* Seleccionar los 3 últimos elementos del vector `vec2`.
+```{r}
+tail(vec2, 3)
+```
+
+---
+
+# Asignar nuevos valores a elementos seleccionados
+
+## Ejemplos
+
+* Asignar al segundo elemento del vector `vec2` el valor `-2` y mostar los valores del vector `vec2`.
+```{r}
+vec2[2] <- -2
+vec2
+```
+
+## Ejercicio
+
+* Cambiar los valores de `sabado` y `domingo` del vector `vec1` por los valores `6` y `7`, respectivamente.
+
+---
+
+class: middle, center
+# Matrices
+
+---
+
+<ru-blockquote>Una matriz es un objeto bidimensional del mismo tipo de datos (numéricos, enteros, lógicos o texto) repartidos en filas y columnas</ru-blockquote>
+
+* Se crean principalmente a través de la función `matrix()`
+
+## Ejemplo
+
+Crear la matriz $\begin{bmatrix}1,3,5\\7,9,11\end{bmatrix}$, asignársela a la variable `matriz1` y mostrar el resultado y el tipo de datos que maneja dicha variable.
+```{r}
+matriz1 <- matrix(seq(1,11,2), nrow = 2, ncol = 3, byrow = TRUE)
+matriz1
+class(matriz1)
+```
+
+---
+
+Otra opción hubiese sido manejando las filas o columnas como vectores. Por ejemplo, creando dos vectores como las filas de la matriz
+```{r}
+vec1 <- seq(1,5,2)
+vec2 <- seq(7,11,2)
+matriz1 <- matrix(c(vec1,vec2), nrow = 2, byrow = T)
+matriz1
+```
+
+Se puede nombrar las filas y columnas de la matriz mediante las funciones `rownames()` y `colnames()`
+
+## Ejercicio
+
+Crear una nueva matriz `matriz2` que sea igual a `matriz1` y nombrar las filas como `"fila1","fila2"` y las columnas como `"columna1", "columna2", "columna2"`
+---
+
+# Seleccion de elementos de una matriz
+
+En este caso hay que seleccionar la posición de la fila y de la columna separados por una coma si es un elemento individual o un vector de posiciones, lógico o de nombres para las filas y columnas separados por comas.
+
+## Ejemplos
+
+* Seleccionar el elemento que ocupa la posición 2 en la fila y 3 en la columna de la `matriz1`.
+```{r}
+matriz1[2,3]
+```
+
+* Seleccionar la primera fila
+```{r}
+matriz1[1, c(1,2,3)] # matriz[1,]
+```
+
+---
+
+Se pueden realizar operaciones por filas y columnas como por ejemplo `rowSums()`, `colSums()`, `rowMeans()`, `colmeans()`. Para realizar otro tipo de operaciones por filas o columnas se necesita la función `apply()`.
+
+# Ejemplos
+
+* Calcular la suma de los elementos de cada columna de la matriz `matriz1`.
+```{r}
+colSums(matriz1)
+```
+
+
+* Calcular el producto de los elemtos de cada fila de la matriz `matriz1`.
+```{r}
+apply(matriz1,1,prod)
+```
+
+---
+
+class: middle, center
+
+# Factores
+
+---
+
+<ru-blockquote>Un factor es la forma que tiene R de almacenar variables categóricas</ru-blockquote>
+
+La forma de declarar un factor es con la función `factor()`.
+
+## Ejemplo
+
+Declarar como factor el vector `c('Hombre', 'Mujer', 'Mujer', 'Mujer', 'Hombre')` que recoge el sexo de 5 encuestados y guardar el resultado en la variable `sexo`. Mostrar el contenido de `sexo`.
+```{r}
+sexo <- factor(c('Hombre', 'Mujer', 'Mujer', 'Mujer', 'Hombre'))
+sexo
+```
+---
+
+En otras ocasiones nos interesa trabajar con valores ordenados.
+
+## Ejemplo
+
+Declarar como factor el vector `c('primarios', 'secundarios', 'superiores', 'superiores', 'secundarios')` que recoge el nivel de estudio de 5 encuestados y guardar el resultado en la variable `estudios`. Mostrar el contenido de `estudios`.
+
+```{r}
+estudios <- factor(c('primarios', 'secundarios', 'superiores',
+                     'superiores', 'secundarios'),
+                   ordered = TRUE, 
+                   levels = c('primarios', 'secundarios', 'superiores'))
+estudios
+```
+
+En estos casos se pueden comparar los elementos de dicho factor. Sin embargo esta compareación no es posible en variables nominales 
+
+
+---
+
+```{r}
+estudios[1] > estudios[3]
+```
+
+
+---
+
+class: middle, center
+
+# Data Frame
+
+---
+
+<ru-blockquote>Es un objeto bidimensional que contiene diferentes tipos de datos. Los datos en cada columna sí deben ser del mismo tipo.</ru-blockquote>
+
+Se declaran mediante la función `data.frame()`.
+
+## Ejemplo 
+
+Crear un *dataframe* `encuesta` que muestre el resultado de una encuensta a 5 personas. Se le preguntaron sobre cuestiones. Sus respuestas fueron `sexo <- factor(c('Hombre', 'Mujer', 'Mujer', 'Mujer', 'Hombre'))`, `ingresos <- c(1500,2300,1700,900,2100)`, `residente <- c(TRUE, TRUE, TRUE, FALSE, TRUE)`, `isla <- c("Gran Canaria","Tenerife", "Tenerife", NA, "Gran Canaria")` y mostrar el contenido de la variable.
+```{r eval = FALSE}
+sexo <- factor(c('Hombre', 'Mujer', 'Mujer', 'Mujer', 'Hombre'))
+ingresos <- c(1500,2300,1700,900,2100)
+residente <- c(TRUE, TRUE, TRUE, FALSE, TRUE)
+isla <- c("Gran Canaria","Tenerife", "Tenerife", NA, "Gran Canaria")
+
+encuesta <- data.frame(sexo, ingresos, residente, isla,
+                       stringsAsFactors = FALSE)
+encuesta
+```
+---
+```{r echo = FALSE}
+sexo <- factor(c('Hombre', 'Mujer', 'Mujer', 'Mujer', 'Hombre'))
+ingresos <- c(1500,2300,1700,900,2100)
+residente <- c(TRUE, TRUE, TRUE, FALSE, TRUE)
+isla <- c("Gran Canaria","Tenerife", "Tenerife", NA, "Gran Canaria")
+
+encuesta <- data.frame(sexo, ingresos, residente, isla, stringsAsFactors = FALSE)
+encuesta
+```
+Se puede obtener la estructura interna del *dataframe* (en ralidad de cualquier objeto de R) con la función `str()`. 
+
+## Ejemplo
+
+Obtener la estructura de la variable `encuesta`
+```{r}
+str(encuesta)
+```
+---
+
+# Selección de elementos de un *dataframe*
+
+Al igual que con vectores y matrices la selección de elementos del *dataframe* se realiza con los operadores `[]`. Para seleccionar los primeros y últimos datos de la tabla se usan las funciones `head()` y `tail()`
+
+## Ejercicios
+
+* Seleccionar aquellos encuestados con ingresos superiores a los 1500 (con todas sus columnas).
+
+* Seleccionar los ingresos e isla del primer, segundo y quinto encuestado.
+
+---
+
+### El operador `$`.
+
+Este operador permite seleccionar columnas enteras de la tabla.
+
+## Ejemplo
+
+Seleccionar la columna de isla de la tabla y asignársela a la variable `cisla`.
+```{r}
+cisla <- encuesta$isla
+cisla
+```
+
+---
+
+En muchas ocasiones no se necesita seleccionar las observaciones que cumplan cierta condición, sino que interesa conocer qué posición de la tabla ocupan esos registros. La función `which()` puede ayudarnos a detectar esas observaciones.
+
+## Ejemplo
+
+Determinar los registros de `encuestas` que superen los 1500.
+```{r}
+which(encuesta$ingresos > 1500)
+```
+
+---
+# Combinar dos *dataframes*
+
+Se realiza con las funciones `rbind()` y `cbind()`.
+
+## Ejemplo
+
+Sea el *datafame* `dfc <- data.frame(hijos = round(rnorm(5,2,1),0), marca <- c("mercedes", "bmw", "audi", NA, "vw"), stringsAsFactors = FALSE)`. Crear un *dataframes* `cencuesta` que sea la combinación por columnas de `encuesta` y `dfc`. Mostrar la estructura de `cencuesta`. 
+```{r eval = FALSE}
+set.seed(123)
+dfc <- data.frame(hijos = round(rnorm(5,2,1),0),
+                  marca = c("mercedes", "bmw", "audi", NA, "vw"),
+                  stringsAsFactors = FALSE)
+cencuesta <- cbind(encuesta, dfc)
+str(cencuesta)
+```
+---
+```{r echo = FALSE}
+set.seed(123)
+dfc <- data.frame(hijos = round(rnorm(5,2,1),0), marca <- c("mercedes", "bmw", "audi", NA, "vw"), stringsAsFactors = FALSE)
+cencuesta <- cbind(encuesta, dfc)
+str(cencuesta)
+```
+
+---
+
+Sea el *dataframe* `dfr <- data.frame(sexo = c("Hombre","Mujer"), ingresos = c(1250,3000), residente = c(F, T), isla = c(NA, "Fuerteventura"), stringsAsFactors = FALSE)`. Crear un *dataframes* `rencuesta` que sea la combinación por filas de `encuesta` y `dfr`
+```{r}
+dfr <- data.frame(sexo = c("Hombre","Mujer"),
+                  ingresos = c(1250,3000),
+                  residente = c(F, T),
+                  isla = c(NA, "Fuerteventura"),
+                  stringsAsFactors = FALSE)
+rencuesta <- rbind(encuesta, dfr)
+str(rencuesta)
+```
+
+---
+
+class: middle, center
+
+# Lista
+
+---
+
+<ru-blockquote>Una lista es un objeto que permite recoger objetos de diferentes tipos</ru-blockquote>
+
+Se crean con la función `list()`
+
+## Ejemplo
+
+Crear una lista con mombre `lista1` con los vectores `vec1`, `vec2`, la matriz `matriz1` y el *data.frame* `encuesta`. Mostrar la estrucrura de la lista recién creada.
+```{r}
+lista1 <- list(vec1, vec2, matriz1, encuesta)
+str(lista1)
+```
+
+---
+
+# Seleccionar elementos de una lista
+
+Los elemetos de una lista se seleccionan con el operador `[[]]`, o bien con el operador `$` si el elemento dentro de la lista tiene nombre. Un vez seleccionado, a su vez, se pueden seleccionar elementos dentro de ese elemento con el operador `[]`.
+
+# Ejemplo
+
+* Seleccionar el segundo elemento del vector `vec1` de la lista `lista1`
+```{r}
+lista1[[1]][2]
+# lista$vec1[2]
+```
+
+---
+
+background-image: url(img/6Vwry.png)
+background-size: 600pt
+background-position: 50% 50%
+
+---
+
+background-image: url(https://media.giphy.com/media/OcZp0maz6ALok/giphy.gif)
+background-size: cover
+---
+
+
+
+class:  inverse, center, middle
+
+# Data Frames: Manejo de ficheros o conjuntos de datos.
+
+---
+
+* La lectura de los datos es una etapa fundamental antes de empezar con la exploración de los datos y el posterior análisis.
+
+* La mayoría de las veces esa lectura o importación se hacen desde ficheros o fuentes externas.
+
+* Es el primer paso del *workflow* para el análisis de datos.
+
+    * Lectura o importación de datos
+    * Limpieza
+    * Exploración
+    * Análisis
+
+---
+
+# Importar ficheros csv
+
+* Con el comando `read.csv()`<sup>1</sup>
+
+## Ejemplo 
+
+Leer el fichero `gasto_clean.csv`, que contiene las [series trimestrales de gasto turístico. Islas de Canarias. 2018 (Metodología 2018)](http://www.gobiernodecanarias.org/istac/jaxi-istac/menu.do?uripub=urn:uuid:70b2796b-2f02-435c-9f0a-7588612bb733) según la EGT recogidas en el [ISTAC](www.istac.es), de la carpeta `data` y almacenarlo en la variable `datos`. Cambiar el nombre de las variables por `c("Pais",paste0("T",1:3,"_2018"))`Mostrar la estructura y las 5 primeras filas.
+```{r eval=FALSE}
+datos <- read.csv2("data/gasto_clean.csv", stringsAsFactors = FALSE)
+names(datos) <- c("Pais",paste0("T",1:3,"_2018"))
+str(datos)
+head(datos)
+```
+
+.footnote[[1] Considerar la función `read.csv2()` cuando el separador es ';'. Parámetros a considerar `skip` y `header`]
+---
+```{r echo=FALSE}
+datos <- read.csv2("data/gasto_clean.csv", stringsAsFactors = FALSE, encoding = "UTF-8")
+names(datos) <- c("Pais",paste0("T",1:3,"_2018"))
+str(datos)
+head(datos)
+```
+---
+
+Para termninar de limpiar los datos debemos convertir los textos en números. Normalmente se podría hacer a través de `as.numeric`. Sin embargo, al estar escritos los números en formato no anglosajón hay que hacer la conversión de forma manual. Hay que eliminar el punto, sustituir la , por el . y convertirlo con `as.numeric`.
+```{r}
+datos$T1_2018 <- gsub("\\.","",datos$T1_2018)
+datos$T1_2018 <- gsub(",","\\.",datos$T1_2018)
+datos$T1_2018 <- as.numeric(datos$T1_2018)
+class(datos$T1_2018)
+```
+
+## Ejercicio 
+
+Repetir la operación para las columnas `T2_2018` y `T3_2018` y mostar las 5 primeras filas de la tabla.
+
+---
+
+* Mediante la función `read_csv()` del paquete `readr`.<sup>2</sup>
+
+```{r eval = FALSE}
+install.packages("readr")
+```
+
+
+```{r eval = 1:3}
+library(readr)
+datos <- read_csv2("data/gasto_clean.csv")
+names(datos) <- c("Pais",paste0("T",1:3,"_2018"))
+str(datos)
+```
+.footnote[[2] Considerar el parámetro locale = locale(encoding = 'ISO-8859-1') cuando el csv está grabado desde excel para Windows. [Cheetsheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf)]
+---
+
+```{r echo = FALSE, eval = 4}
+library(readr)
+datos <- read_csv2("data/gasto_clean.csv")
+names(datos) <- c("Pais",paste0("T",1:3,"_2018"))
+str(datos)
+```
+
+---
+
+* Mediante el botón `Import Dataset` de la pestaña `Environment`
+
+---
+
+# Importar ficheros excel
+
+* Copiando y cargando los datos copiados
+```{r, eval = FALSE}
+datos_excel <- read.table(file = "clipboard", sep = "\t", header=TRUE)
+str(datos_excel)
+```
+
+En este caso las columnas las ha convertido en factor. Hay que convertirlas en *strings* con la función `as.character()` y después limpiar los datos para poder convertirlos a numéricos como se hizo en ejemplos anteriores.
+
+---
+* Mediante la función `read_excel()` del paquete `readxl`
+```{r eval = FALSE}
+install.packages("readxl")
+```
+
+```{r}
+library(readxl)
+datos_excel <- read_excel("data/gastos.xlsx")
+str(datos_excel)
+```
+
+En este caso las columnas las ha convertido en  *strings*. Hay que limpiar los datos para poder convertirlos a numéricos como se hizo en ejemplos anteriores.
+
+---
+
+* Mediante el botón `Import Dataset` de la pestaña `Environment`
+
+---
+
+# Importar datos de otros software como Stata, SAS, SPSS
+
+* Mediante el botón `Import Dataset` de la pestaña `Environment`
+
+* Mediante el paquete `haven`.
+```{r eval = FALSE}
+install.packages("haven") 
+dataset <- read_stata() # Stata
+dataset <- read_sav() # SPSS
+dataset <- read_sas() # SAS
+```
+---
+# Exportar datos
+
+Hay varias funciones que permiten grabar y más tarde cargar los ficheros ya grabados.
+
+   |Guardar|Leer
+---|:---|:---
+Todas|`save.image()`|`load()`
+Algunos objetos|`save()`|`load()`
+Un objeto|`saveRDS()`, `readr::write_rds()`|`readRDS()`, `readr::read_rds()`
+Csv|`write.csv()`, `readr:write_csv()`| `read.csv()`, `readr::read_csv()`
+Excel|`xlsx::write.xlsx()`|`readr::read_excel()`
+
+---
+
+# Ejemplos
+
+* Guardar todas las variable del espacio de trabajo en el fichero `cursor1asesion.Rdta` dentro de la carpeta `data`
+```{r, eval = FALSE}
+save.image("data/cursor1asesion.Rdta")
+```
+
+
+* Añadir una nueva columna `total` a la tabla `datos` que sea la suma de los gastos de los tres trimetres y asignaremos la nueva tabla a la variable `ndatos`. Guardar los *dataframes* `datos` y `ndatos` en el fichero `datos.Rdta` en la carpeta `data`. Borrar esas dos variables y volverlas a cargar en el espacio de trabajo.
+```{r, eval = FALSE}
+ndatos <- datos
+ndatos$total <- colSums(datos[,-1])
+save(datos, ndatos, "data/datos.Rdta")
+rm(datos, ndatos)
+load("data/datos.Rdta")
+```
+---
+
+* Guardar `datos` en el fichero `datos.Rds` en la carpeta `data`. Cargar el objeto bajo el nombre `datosrds`.
+```{r, eval = FALSE}
+saveRDS(datos, "data/datos.Rds")
+datosrds <- readRDS("data/datos.Rds")
+```
+
+* Guardar `ndatos` en el fichero `ndatos.csv` dentro de la carpeta `data`.
+```{r, eval = FALSE}
+write_csv(ndatos, "data/ndatos.csv")
+```
+
+* Guardar `datos` y `encuestas` en dos hojas del fichero `dataframes.xlsx` dentro de la carpeta `data`
+```{r, eval = FALSE}
+install.packages("xlxs")
+library(xlsx)
+write.xlsx(datos, file = "data/dataframes.xlsx")
+write.xlsx(encuestas, file = "data/dataframes.xlsx", append=TRUE)
+```
+
+
+---
+class:  inverse, center, middle
+
+# Creación de funciones.
+
+---
+
+class: middle, center
+
+# Condicionales
+
+---
+
+# If
+
+Se puede controlar el flujo de ejecución mediante el uso de condicionales.
+
+> if(cond){
+expresión
+}
+
+## Ejemplo
+
+Comparamos el total de gasto del primer y segundo semestre de 2018 según datos recogidos en la tabla `datos` y en caso de que el total del primer trimestre sea mayor que el del segundo imprimir por pantalla `El total de gasto del primer trimestre de 2018 fue superior al del segundo`.
+```{r}
+total1T <- sum(datos$T1_2018)
+total2T <- sum(datos$T2_2018)
+texto <- paste0()
+if(total1T > total2T){
+  print("El total de gasto del primer trimestre de 2018 fue superior al del segundo")
+}
+```
+
+---
+
+# Else
+
+Mediante el uso de `else` se puede establece qué parte del código se ejecuta en caso de que la consición no se cumpla.
+
+## Ejemplo
+
+Siguiendo el ejemplo anterior, imprimir el mensaje `El total de gasto del segundo trimestre de 2018 fue superior al del primero` en caso de que no se cumpla la condición.
+
+```{r}
+if(total1T > total2T){
+  print("El total de gasto del primer trimestre de 2018 fue superior al del segundo")
+} else {
+  print("El total de gasto del segundo trimestre de 2018 fue superior al del primero")
+}
+```
+
+---
+
+En la transparencia [#27](/index.html#27) se introdujeron los operadores lógicos. A esta lista se deben añadir el operador lógico **y** (`&`) y  el operador lógico **o** (`|`) que controlan si se cumplen varias condiciones.
+
+## Ejemplos
+
+* Seleccionar de la tabla `total` aquellos países que tengan en el primer trimestre de 2018 un gasto superior a 1500 e inferior a 2000.
+```{r}
+index <- datos$T1_2018 > 1500 & datos$T1_2018 < 2000
+datos[index,]
+```
+
+---
+
+* Seleccionar de la tabla `total` aquellos países que tengan en el primer trimestre de 2018 un gasto inferior a 1500 o superior a 2000.
+```{r}
+index <- datos$T1_2018 > 1500 | datos$T1_2018 < 2000
+datos[index,]
+```
+
+---
+
+class: middle, center
+
+# Bucles
+
+---
+
+La estructura básica para un bucles es a través de:
+
+> for (var in vec){expresiones}
+
+## Ejemplo
+
+Recorrer con un bucle la columna `T1_2018` de la tabla `datos` e imprimir el valor.
+```{r}
+for (i in datos$T1_2018){
+  print(i)
+}
+```
+
+---
+```{r}
+for (i in 1:length(datos$T1_2018)){
+  print(datos$T1_2018[i])
+}
+```
+---
+# Combibado condicionales y bucles
+
+## Ejemplo
+
+Crear un *dataframe* `datos_copia` que sea igual a `datos`. Crear en `datos_copia` la columna `gasto_mayor`, que será igual a 1 si el gasto en el primer trismestre es superior al segundo.
+```{r}
+temp <- c()
+for (i in 1:nrow(datos)){
+  if(datos$T1_2018[i] > datos$T2_2018[i]){
+    temp[i] <- 1
+  } else
+    temp[i] <- 0
+}
+datos$gasto_mayor <- temp
+head(datos,3)
+```
+
+---
+
+class: middle, center
+
+# Funciones
+
+---
+  
+```{r echo=FALSE}
+gastos <- read.csv2("data/gasto_clean.csv", stringsAsFactors = FALSE)
+names(gastos) <- c("Pais",paste0("T",1:3,"_2018"))
+str(datos)
+```
+
+---
+
+Para hacer la coversión a numérico tendríamos que repetir el siguiente código para cada columna.
+```{r, eval = FALSE}
+gastos$T1_2018 <- gsub("\\.","",datos$T1_2018)
+gastos$T1_2018 <- gsub(",","\\.",datos$T1_2018)
+gastos$T1_2018 <- as.numeric(datos$T1_2018)
+```
+Podemos crear una función y aplicarla a cada columna
+
+---
+
+```{r}
+mi_funcion <- function(columna){
+  columna <- gsub("\\.","", columna)
+  columna <- gsub(",","\\.", columna)
+  columna <- as.numeric(columna)
+  columna
+}
+conv <- apply(gastos[,2:4], 2, mi_funcion)
+df.gastos <- data.frame(Pais = gastos$Pais,conv, stringsAsFactors = FALSE)
+df.gastos
+```
+
+---
+class:  inverse, center, middle
+
+# Preparación de datos.
+
+---
+
+# Paquete dplyr <sup>4</sup>
+
+```{r}
+# install.package(dplyr)
+library(dplyr)
+```
+
+
+Conjunto de funciones para la manipulación de datos
+
+## Funciones básicas
+
+* `mutate`. Crea una nueva columna.
+* `select`. Selecciona columnas.
+* `filter`. Filtra en función de una condición.
+* `gruop_by`. Agrupa.
+* `summarisse`. Resume.
+* `arrange`. Ordena.
+
+.footnote[[4] [Cheetsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)]
+---
+
+## Ejemplos
+
+* Crear el *dataframe* `seleccion` que contenga solo las columnas de gatos del primer y segundo trimestre de la tabla `gasto`
+```{r}
+seleccion <- select(datos, T1_2018, T2_2018)
+seleccion <- datos %>% select(T1_2018, T2_2018)
+seleccion
+```
+
+---
+* Crear el *dataframe* `filtrado` que contenga una nueva columna llamada `T1_100` que sea igual a la columna `1T_2018` de la tabla `gasto` dividida por 1000, seleccionar aquellos países cuyo valor en esta nueva columna sea mayor o igial a 2 y ordenarlos por el valor obtenido en esta columna.
+```{r}
+filtrado <- datos %>%
+  mutate(T1_100 = T1_2018/1000) %>%
+  filter(T1_100 >= 2) %>%
+  arrange(T1_100)
+filtrado
+```
+---
+
+* Calcular el número de hombres y mujeres de la tabla `encuestas` y obtener la suma de ingresos por sexo. Guardar el resultado en la tabla `grupo`.
+```{r}
+grupo <- encuesta %>%
+  group_by(sexo) %>%
+  summarise(num = n(),
+            suma_ing = sum(ingresos))
+grupo
+```
+
+---
+
+# Paquete tidyr
+
+> Contiene funciones para organizar datos en forma tabular.
+
+```{r}
+# install.packages(tidyr)
+library(tidyr)
+```
+
+
+## Ejemplo
+
+Crear la tabla `org` que contenga los valores de los tres trimetres de la tabla `datos` en una única columna.
+```{r, eval = FALSE}
+org <- gastos %>%
+  gather(T1_2018, T2_2018, T3_2018,
+         key = trimestre,
+         value = gasto)
+org
+```
+
+
+.footnote[[5][Cheetsheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf)]
+
+---
+
+```{r, echo = FALSE}
+org <- gastos %>%
+  gather(T1_2018, T2_2018, T3_2018,
+         key = trimestre,
+         value = gasto)
+org
+```
+
+---
+class:  inverse, center, middle
+
+# Instalación y trabajo con paquetes.
+
+---
+
+<ru-blockquote>Un paquete en R es una colección de funciones de R, datos y código compilado en un formato predefinido. Cuando se ejecuta R se cargan uns paquetes estándar como son los paquetes base, stats, etc. El resto se deben instalar y cargar en memoria antes de poder usar sus funciones.</ru-blockquote>
+
+## Instalación de paquetes
+
+* Con el comando `install.package()`
+
+* A través de la pestaña `Packages` y pulsando el botón `Install`
+
+* A través del menú `Tools`, `Install packages`
+
+## Cargar el paquete en memoria
+
+* Con el comando `library()`
+
+* Pulsando en la casilla de verificación de la lista de paquetes intalados en la pestaña de `Packages`
+
+---
+
+
+
+
+
+---
+
+background-image: url(https://media.giphy.com/media/xThuWtYjkLvUvK4zp6/giphy.gif)
+background-size: cover
+
+
+
+
+
+

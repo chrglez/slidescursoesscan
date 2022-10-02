@@ -1,2 +1,2 @@
 # slidescursoesscan
-Transparencias curso ESSSCAN. Septiembre 2022
+Transparencias curso ESSSCAN. Octubre 2022
