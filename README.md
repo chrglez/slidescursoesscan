@@ -21,7 +21,7 @@ Para usar R, trabajaremos principalmente dentro del entorno GUI de [RStudio](htt
 ## :calendar: Programación del curso
 
 0. Presentación ([PDF](https://github.com/chrglez/slidescursoessscan/blob/main/Presentaci%C3%B3n/Presentaci%C3%B3n.pdf))
-1. Introducción a R ([HTML](https://raw.githack.com/chrglez/slidescursoessscan/main/Modulo%201/modulo1.html))(PDF)
+1. Introducción a R ([HTML](https://raw.githack.com/chrglez/slidescursoessscan/main/Modulo%201/modulo1.html))([PDF](https://github.com/chrglez/slidescursoessscan/blob/main/Modulo%201/modulo1.pdf))
 2. Análisis estadístico básico en R.
 3. Análisis gráfico con R.
 4. Aplicaciones de R en epidimiología.
