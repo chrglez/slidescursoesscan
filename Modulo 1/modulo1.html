@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>R ESTADÍSTICAS</title>
+    <title>Introducción al lenguaje R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Jaime Pinilla - C. González-Martel" />
     <meta name="date" content="2022-03-10" />
@@ -28,7 +28,10 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# R ESTADÍSTICAS
+# Introducción al lenguaje R
+]
+.subtitle[
+## para la investigación en Ciencias de la Salud
 ]
 .author[
 ### Jaime Pinilla - C. González-Martel
@@ -346,7 +349,7 @@ numerico + texto
 ```
 
 ```
-## Error in numerico + texto: non-numeric argument to binary operator
+## Error in numerico + texto: argumento no-numérico para operador binario
 ```
 
 ```r
@@ -904,8 +907,7 @@ cisla
 ```
 
 ```
-## [1] "Gran Canaria" "Tenerife"     "Tenerife"     NA            
-## [5] "Gran Canaria"
+## [1] "Gran Canaria" "Tenerife"     "Tenerife"     NA             "Gran Canaria"
 ```
 
 ---
@@ -1139,7 +1141,7 @@ datos &lt;- read_csv2("data/gasto_clean.csv")
 
 ```
 ## Rows: 6 Columns: 4
-## -- Column specification -------------------------------------------------
+## -- Column specification --------------------------------------------------------
 ## Delimiter: ";"
 ## chr (1): País
 ## 
@@ -1543,6 +1545,23 @@ class:  inverse, center, middle
 library(dplyr)
 ```
 
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
 
 Conjunto de funciones para la manipulación de datos
 
@@ -1720,7 +1739,7 @@ background-size: cover
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false,
-"ratio": "4:3"
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

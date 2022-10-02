@@ -1,5 +1,6 @@
 ---
-title: "R ESTADÍSTICAS"
+title: "Introducción al lenguaje R"
+subtitle: "para la investigación en Ciencias de la Salud"
 
 author: "Jaime Pinilla - C. González-Martel"
 date: "03/10/2022"
@@ -13,7 +14,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      ratio: "4:3"
+      ratio: "16:9"
 
     includes:
       in_header: "header.html"
