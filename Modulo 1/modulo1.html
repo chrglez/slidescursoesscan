@@ -46,15 +46,15 @@ class: center, middle, inverse, title-slide
 # Introducción a R
 
 
-1. [Instalación y primeros pasos con R.](/index.html#3)
+1. [Instalación y primeros pasos con R.](#introduccion)
 
-2. [Tipos de objetos: vectores, matrices, data frames y listas.](/index.html#12)
+2. [Tipos de objetos: vectores, matrices, data frames y listas.](#objetos)
 
-3. [Data Frames:Manejo de ficheros o conjuntos de datos.](/index.html#56)
+3. [Data Frames: Manejo de ficheros o conjuntos de datos.](#dataframes)
 
-4. [Creación de funciones.](/index.html#71)
+4. [Creación de funciones.](#funciones)
 
-5. [Instalación y trabajo con paquetes.](/index.html#92)
+5. [Instalación y trabajo con paquetes.](#paquetes)
 
 
 
@@ -63,6 +63,7 @@ class: center, middle, inverse, title-slide
 
 
 class:  inverse, center, middle
+name: introduccion
 
 # Instalación y primeros pasos con R.
 
@@ -168,6 +169,7 @@ background-image: url(https://media.giphy.com/media/2juvZoQ3oLa4U/giphy.gif)
 ---
 
 class:  inverse, center, middle
+name: objetos
 
 # Tipos de objetos: vectores, listas, matrices, y data frames.
 
@@ -349,7 +351,7 @@ numerico + texto
 ```
 
 ```
-## Error in numerico + texto: non-numeric argument to binary operator
+## Error in numerico + texto: argumento no-numérico para operador binario
 ```
 
 ```r
@@ -907,8 +909,7 @@ cisla
 ```
 
 ```
-## [1] "Gran Canaria" "Tenerife"     "Tenerife"     NA            
-## [5] "Gran Canaria"
+## [1] "Gran Canaria" "Tenerife"     "Tenerife"     NA             "Gran Canaria"
 ```
 
 ---
@@ -1048,6 +1049,7 @@ background-size: cover
 
 
 class:  inverse, center, middle
+name: dataframes
 
 # Data Frames: Manejo de ficheros o conjuntos de datos.
 
@@ -1137,39 +1139,17 @@ datos &lt;- read_csv2("data/gasto_clean.csv")
 ```
 
 ```
-## 
-                                                            
-i Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
+## i Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
+```
 
-                                                            
-Rows: 6 Columns: 4
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
-
-                                                            
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
-
-                                                            
--- Column specification -------------------------------------------------
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
-
-                                                            
-Delimiter: ";"
+```
+## Rows: 6 Columns: 4
+## -- Column specification --------------------------------------------------------
+## Delimiter: ";"
 ## chr (1): País
 ## 
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
-
-                                                            
-## 
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
-
-                                                            
-i Use `spec()` to retrieve the full column specification for this data.
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
-
-                                                            
-i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## [36mi[39m Rendering [34mModulo 1/modulo1.Rmd[39m into [32mModulo 1/modulo1.html[39m
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ```r
@@ -1315,6 +1295,7 @@ write.xlsx(encuestas, file = "data/dataframes.xlsx", append=TRUE)
 
 ---
 class:  inverse, center, middle
+name: funciones
 
 # Creación de funciones.
 
@@ -1464,7 +1445,7 @@ for (i in 1:length(datos$T1_2018)){
 ## [1] 2730.37
 ```
 ---
-# Combibado condicionales y bucles
+# Combinando condicionales y bucles
 
 ## Ejemplo
 
@@ -1555,12 +1536,45 @@ df.gastos
 
 ---
 class:  inverse, center, middle
+name: paquetes
+
+# Instalación y trabajo con paquetes.
+
+---
+
+&lt;ru-blockquote&gt;Un paquete o librería en R es una colección de funciones de R, datos y código compilado en un formato predefinido. Cuando se ejecuta R se cargan uns paquetes estándar como son los paquetes base, stats, etc. El resto se deben instalar y cargar en memoria antes de poder usar sus funciones.&lt;/ru-blockquote&gt;
+
+## Instalación de paquetes
+
+* Con el comando `install.package()`
+
+* A través de la pestaña `Packages` y pulsando el botón `Install`
+
+* A través del menú `Tools`, `Install packages`
+
+## Cargar el paquete en memoria
+
+* Con el comando `library()`
+
+* Pulsando en la casilla de verificación de la lista de paquetes intalados en la pestaña de `Packages`
+
+
+
+---
+class:  inverse, center, middle
 
 # Preparación de datos.
 
 ---
 
-# Paquete dplyr &lt;sup&gt;4&lt;/sup&gt;
+# [Tidyverse](https://www.tidyverse.org/)
+
+![Tidyverse](https://www.storybench.org/wp-content/uploads/2017/05/tidyverse.png)
+
+---
+
+
+# Paquete [dplyr](https://dplyr.tidyverse.org/) &lt;sup&gt;4&lt;/sup&gt;
 
 
 ```r
@@ -1568,6 +1582,18 @@ class:  inverse, center, middle
 library(dplyr)
 ```
 
+&lt;ru-blockquote&gt;El operador `pipe` **(%&gt;%)**&lt;/br&gt;puede leerse como "entonces" y permite encadenar funciones pasando elelemento que está a la izquierda del pipe a la derecha como un argumento.&lt;/ru-blockquote&gt;
+
+
+```r
+# R base
+head(datos)
+# Tidiverse
+datos %&gt;% head()
+```
+
+
+---
 
 Conjunto de funciones para la manipulación de datos
 
@@ -1580,10 +1606,11 @@ Conjunto de funciones para la manipulación de datos
 * `summarisse`. Resume.
 * `arrange`. Ordena.
 
-.footnote[[4] [Cheetsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)]
+.footnote[[4] [Cheetsheet](https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf)]
 ---
 
 ## Ejemplos
+
 
 * Crear el *dataframe* `seleccion` que contenga solo las columnas de gatos del primer y segundo trimestre de la tabla `gasto`
 
@@ -1606,7 +1633,7 @@ seleccion
 ```
 
 ---
-* Crear el *dataframe* `filtrado` que contenga una nueva columna llamada `T1_100` que sea igual a la columna `1T_2018` de la tabla `gasto` dividida por 1000, seleccionar aquellos países cuyo valor en esta nueva columna sea mayor o igial a 2 y ordenarlos por el valor obtenido en esta columna.
+* Crear el *dataframe* `filtrado` que contenga una nueva columna llamada `T1_100` que sea igual a la columna `T1_2018` de la tabla `gasto` dividida por 1000, seleccionar aquellos países cuyo valor en esta nueva columna sea mayor o igial a 2 y ordenarlos por el valor obtenido en esta columna.
 
 ```r
 filtrado &lt;- datos %&gt;%
@@ -1627,27 +1654,8 @@ filtrado
 ```
 ---
 
-* Calcular el número de hombres y mujeres de la tabla `encuestas` y obtener la suma de ingresos por sexo. Guardar el resultado en la tabla `grupo`.
 
-```r
-grupo &lt;- encuesta %&gt;%
-  group_by(sexo) %&gt;%
-  summarise(num = n(),
-            suma_ing = sum(ingresos))
-grupo
-```
-
-```
-## # A tibble: 2 x 3
-##   sexo     num suma_ing
-##   &lt;fct&gt;  &lt;int&gt;    &lt;dbl&gt;
-## 1 Hombre     2     3600
-## 2 Mujer      3     4900
-```
-
----
-
-# Paquete tidyr
+# Paquete [tidyr](https://tidyr.tidyverse.org/ )&lt;sup&gt;5&lt;/sup&gt;
 
 &gt; Contiene funciones para organizar datos en forma tabular.
 
@@ -1664,69 +1672,81 @@ Crear la tabla `org` que contenga los valores de los tres trimetres de la tabla 
 
 ```r
 org &lt;- gastos %&gt;%
-  gather(T1_2018, T2_2018, T3_2018,
-         key = trimestre,
-         value = gasto)
+  pivot_longer(cols = c("T1_2018","T2_2018","T3_2018"),
+                names_to = "trimestre",
+                values_to = "gasto")
 org
 ```
 
 
-.footnote[[5][Cheetsheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf)]
+.footnote[[5] [Cheetsheet](https://github.com/rstudio/cheatsheets/blob/master/tidyr.pdf)]
 
 ---
 
 
 ```
-##                          Pais trimestre    gasto
-## 1                    Alemania   T1_2018 2.149,02
-## 2                     EspaÃ±a   T1_2018 1.789,30
-## 3                     Holanda   T1_2018 2.206,18
-## 4           PaÃ­ses NÃ³rdicos   T1_2018 1.875,08
-## 5                 Reino Unido   T1_2018 2.579,05
-## 6               Otros paÃ­ses   T1_2018 2.730,37
-## 7                    Alemania   T2_2018 2.281,34
-## 8                     EspaÃ±a   T2_2018 1.563,97
-## 9                     Holanda   T2_2018 1.832,84
-## 10          PaÃ­ses NÃ³rdicos   T2_2018 2.237,31
-## 11                Reino Unido   T2_2018 1.813,21
-## 12              Otros paÃ­ses   T2_2018 1.803,99
-## 13                   Alemania   T3_2018 2.122,84
-## 14                    EspaÃ±a   T3_2018 1.279,85
-## 15                    Holanda   T3_2018 1.595,82
-## 16          PaÃ­ses NÃ³rdicos   T3_2018 2.175,26
-## 17                Reino Unido   T3_2018 1.641,40
-## 18              Otros paÃ­ses   T3_2018 2.065,13
+## # A tibble: 18 x 3
+##    Pais                        trimestre gasto   
+##    &lt;chr&gt;                       &lt;chr&gt;     &lt;chr&gt;   
+##  1 "        Alemania"          T1_2018   2.149,02
+##  2 "        Alemania"          T2_2018   2.281,34
+##  3 "        Alemania"          T3_2018   2.122,84
+##  4 "         EspaÃ±a"          T1_2018   1.789,30
+##  5 "         EspaÃ±a"          T2_2018   1.563,97
+##  6 "         EspaÃ±a"          T3_2018   1.279,85
+##  7 "         Holanda"          T1_2018   2.206,18
+##  8 "         Holanda"          T2_2018   1.832,84
+##  9 "         Holanda"          T3_2018   1.595,82
+## 10 "         PaÃ­ses NÃ³rdicos" T1_2018   1.875,08
+## 11 "         PaÃ­ses NÃ³rdicos" T2_2018   2.237,31
+## 12 "         PaÃ­ses NÃ³rdicos" T3_2018   2.175,26
+## 13 "         Reino Unido"      T1_2018   2.579,05
+## 14 "         Reino Unido"      T2_2018   1.813,21
+## 15 "         Reino Unido"      T3_2018   1.641,40
+## 16 "         Otros paÃ­ses"     T1_2018   2.730,37
+## 17 "         Otros paÃ­ses"     T2_2018   1.803,99
+## 18 "         Otros paÃ­ses"     T3_2018   2.065,13
 ```
 
 ---
-class:  inverse, center, middle
 
-# Instalación y trabajo con paquetes.
+# Ejercicio
+
+
+* Importar el fichero `casos_hosp_uci_def_sexo_edad_provres.csv` desde la url [https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv](https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv) en la variable `covid19`. Recoge el número de casos, número de hospitalizaciones, número de ingresos en UCI y número de defunciones por sexo, edad y provincia de residencia de de COVID-19 declarados a a la Red Nacional de Vigilancia Epidemiológica (RENAVE) a través de la plataforma informática vía Web SiViES (Sistema de Vigilancia de España) que gestiona el Centro Nacional de Epidemiología (CNE)&lt;sup&gt;6&lt;/sup&gt;
+
+
+```r
+url &lt;- "https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"
+covid19 &lt;- readr::read_csv(url)
+```
+
+
+
+
+
+
+
+
+.footnote[[6] [Códigos ISO de las provincias](https://es.wikipedia.org/wiki/ISO_3166-2:ES#Provincias)]
 
 ---
 
-&lt;ru-blockquote&gt;Un paquete en R es una colección de funciones de R, datos y código compilado en un formato predefinido. Cuando se ejecuta R se cargan uns paquetes estándar como son los paquetes base, stats, etc. El resto se deben instalar y cargar en memoria antes de poder usar sus funciones.&lt;/ru-blockquote&gt;
-
-## Instalación de paquetes
-
-* Con el comando `install.package()`
-
-* A través de la pestaña `Packages` y pulsando el botón `Install`
-
-* A través del menú `Tools`, `Install packages`
-
-## Cargar el paquete en memoria
-
-* Con el comando `library()`
-
-* Pulsando en la casilla de verificación de la lista de paquetes intalados en la pestaña de `Packages`
+* Crear el *dataframe* `seleccion` que contenga solo las columnas `provincia_iso`,`sexo`,`grupo_edad`,`fecha` y `num_casos` de la tabla `covid19`
+* Crear el *dataframe* `filtrado` que contenga solo los casos de la provincia de Alicante (A). A continuación crear una nueva columna llamada `num_casos_rel` que sea igual a la columna `num_casos` de la tabla `covid19` dividida por 1 879 888, que fue la población de Alicante en 2020 (Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Provincia_de_Alicante)).
+* Crear el *dataframe* `agrupado` que sea el número total de casos para cada provincia para todo el periodo. A continuación, crear una nueva columna que represente el porcentaje de casos de cada provincia sobre el total.
+* Crear el *dataframe* `ancho` que contenga en columnas el nombre de las provincias y en filas el número de casos por fecha. *Antes de realizar el `pivot wider` debemos agrupar por `provincia_iso` y `fecha`*.
 
 ---
 
 
+# Ejercicio
 
+&lt;video width="100%" height="100%" controls id="my_video"&gt;
+&lt;source src="media/you-see-you-can-do-it.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
 
-
+You see? you can do it
 ---
 
 background-image: url(https://media.giphy.com/media/xThuWtYjkLvUvK4zp6/giphy.gif)
