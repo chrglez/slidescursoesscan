@@ -1,0 +1,913 @@
+---
+title: "**Módulo 2** Análisis estadístico básico con R"
+output: 
+  pdf_document:
+  number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Descripción estadística de las variables de un conjunto de datos
+
+## - Introducción
+
+En este módulo se mostrará cómo utilizar el análisis estadístico para explorar la información contenida en los datos, lo que los científicos de datos denominan "análisis exploratorio de datos" (AED). El AED consta de tres etapas:
+
+1. Generar preguntas sobre los datos
+2. Buscar respuestas, resumiendo y modelizando los datos
+3. Utilizar lo aprendido anteriormente para replantear nuestras preguntas de investigación o realizar nuevas
+
+Durante el AED debemos sentirnos "libres" para investigar cada idea que se nos ocurra. Algunas de estas ideas se desarrollarán y otras nos llevarán a callejones sin salida.
+
+El AED es la parte más importante del análisis de nuestros datos, incluso si las preguntas ya son conocidas, pues nos permite un primer contacto con la calidad y posibilidades de nuestros datos. No olvidar que la limpieza de datos es otra utilidad del AED.
+
+En esta primera parte utilizaremos funciones del paquete base, en la parte final excepcionalmente utilizaremos algunos paquetes para táreas específicas.
+
+## - Las Tablas de Frecuencias
+
+Herramienta para resumir, de forma ordenada, un conjunto de datos estadísticos. Presenta la frecuencia de cada categoría mediante valores absolutos o relativos.
+
+### Tabla de frecuencias unidimensional (una sóla variable)
+
+Comenzamos generando nuestros datos manualmente dando valores a un vector. Por ejemplo, el objeto Cafeina que contiene el consumo de cafeina en miligramos/día en una muestra de 20 individuos.
+
+```{r}
+Cafeina <-c(959,791,686,112,373,44,751,546,751,575,784,527,384,896,236,960,
+22,72,649,934)
+```
+Utilizamos la función table(..) del paquete base
+
+```{r}
+table(Cafeina)
+```
+
+La tabla tal y como se presenta resulta inadecuada para resumir la información. Me conviene organizar las categorías por intervalos, para ello utilizo la función cut(...). Creo el objeto Cafeina_i donde guardaré la variable Cafeina dividida en 4 intervalos de igual amplitud. La misma función me permite especificar la amplitud y el número de intervalos.
+
+```{r}
+Cafeina_i <- cut(Cafeina, breaks = 4)
+table(Cafeina_i)
+```
+
+Si queremos mostrar las frecuencias acumuladas:
+
+```{r}
+cumsum(table(Cafeina_i))
+```
+
+
+Para mostrar la frecuencia en proporciones, utilizo la función prop.table(...).
+
+```{r}
+prop.table(table(Cafeina_i))
+```
+
+### Gestión de valores missing
+
+En ocasiones nuestro vector puede tener valores desconocidos (missing). Veamos de nuevo el vector Cafeina, ahora con 23 observaciones de las cuales las dis últimas son missing (NA).
+
+```{r}
+Cafeina <-c(959,791,686,112,373,44,751,546,751,575,784,527,384,896,236,960,
+            22,72,649,934, 1230, NA, NA)
+```
+
+Para que la tabla contabilice los valores missing, habrá que indicarlo en la función.
+
+```{r}
+table(Cafeina, useNA = "ifany")
+```
+
+A continuación organizo la variable en intervalos, dejando uno para los valores missing.
+
+```{r}
+Cafeina_i <- cut(Cafeina, breaks = c(NA, NA, 21, 100, 400, 600, Inf))
+
+table(Cafeina_i, useNA = "ifany")
+```
+
+Finalmente, indicar que la función table(...) permite excluir de la tabla categorías concretas. Por ejemplo:
+
+```{r}
+table(Cafeina_i, exclude=c("(21,100]", "(100,400]"))
+```
+
+### Tabla de frecuencias bidimensional (dos variables)
+
+Denominada también como tabla de contingencia o tabla de doble entrada. Está compuesta por filas (horizontales), para la información de una variable y columnas (verticales) para la información de otra variable. Estas filas y columnas delimitan las celdas donde se vuelcan las frecuencias de cada combinación de las variables analizadas.
+
+Incorporo al análisis una nueva variable. Una variable cualitativa que recoge si el individuo tiene Sí/No problemas para dormir. 
+
+```{r}
+Problema <- c("Sí", "Sí", "No", "Sí", "No", "No", "Sí", "No", "Sí", 
+              "Sí", "Sí", "No", "Sí", "No", "Sí", "No", "No", "Sí", 
+              "No", "Sí", "Sí", "No", "No")
+```
+
+La primera variable en la función irá a la vertical y la segunda a la horizontal.
+
+```{r}
+table(Problema, Cafeina, useNA = "ifany")
+
+prop.table(table(Problema, Cafeina_i))
+```
+
+Por defecto, la tabla muestra la proporción de observaciones en cada celda respecto al total de observaciones. Si quiero las proporciones por columnas debo incluir margin=2 (=1 si quiero la proporción por filas). 
+
+```{r}
+prop.table(table(Problema, Cafeina_i), margin=2)
+```
+Con addmargins(...) puedo añadir a la tabla la suma de las columnas (margin=1) o de las filas (margin=2)
+
+```{r}
+addmargins(table(Problema, Cafeina_i), margin=1)
+```
+
+Veamos ahora un ejemplo de utilización de las funciones anteriores en variables que provienen de un data.frame. Para ello deberás cargar el dataset, numberofwords.csv. Consulta el fichero basesdedatos.pdf para conocer su contenido.
+
+Carga la base de datos con import Dataset de R studio y echa un vistazo a la estructura de los datos.
+
+```{r}
+DF <- read.csv("numberofwords.csv")
+str(DF)  # estructura de los datos
+head(DF)
+
+```
+
+Replica el análisis de los apartados anteriores. Utilizando las variable age y gender:
+
+```{r}
+table(DF$age)       # tabla de frecuencias de la variable age
+prop.table(table(DF$age)) # frecuencias en proporciones (tanto por uno)
+
+table(DF$gender)       # tabla de frecuencias de la variable age
+prop.table(table(DF$gender)) # frecuencias en proporciones (tanto por uno)
+```
+
+
+### Imagina que quieres otro orden diferente al alfabético
+
+```{r}
+DF$gender <- ordered(DF$gender,
+                          levels = c("male", "female"),
+                          labels = c("male", "female"))
+
+table(DF$gender)
+
+```
+
+Como tabla de doble entrada:
+
+```{r}
+with(DF, table(gender, ageat1w))
+
+with(DF, prop.table(table(gender, ageat1w)))
+round(with(DF, prop.table(table(gender, ageat1w))), 2) # redondeando a 2 decimales
+
+```
+
+Puedo incorporar una tercera variable:
+
+```{r}
+with(DF, table(gender, ageat1w, region))
+
+xtabs(~ gender + ageat1w + region, data=DF) # otra alternativa
+
+```
+## - Tablas de Frecuencias utilizando el paquete "summarytools"
+
+Para más informaciónsobre este paquete consulta:
+https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html
+
+Cargamos la librería una vez descargado el paquete.
+
+```{r}
+library(summarytools)
+
+freq(DF)
+```
+
+Para evitar saturar de filas la tabla de resultados anterior, se ignoran las variables que tienen más de 25 valores diferentes. Este umbral se puede modificar st_options(); Por ejemplo, para cambiarlo a 5, usaríamos st_options(freq.ignore.threshold = 5)
+
+De nuevo podemos eliminar o mostrar la columna de valores missing. Este paquete nos permite también orderar las categorías por orden de frecuencia.
+
+```{r}
+freq(DF$gender, report.nas = F)
+freq(DF$ageat1w, report.nas = T)
+freq(DF$ageat1w, order="freq", report.nas = T)
+```
+
+Para generar tablas de doble entrada utilizamos ctable(...):
+
+```{r}
+ctable(x=DF$gender, y=DF$region, prop ="r") 
+# "c" colum, "t" total "n" omit
+```
+
+
+Ejercicio:
+
+1. ¿Cuántos niños de 16, 18 y 20 meses de edad hay en el conjunto de datos?
+2. ¿Cuántos niños residentes en zonas rurales tienen 16, 18 y 20 meses de edad?
+3. ¿Existe diferencia en la distribución por edades entre los niños residentes en hábitat urbano o rural?
+
+
+```{r}
+# Solución:
+
+addmargins(table(DF$age), margin=1)
+
+addmargins(table(DF$age[DF$region=="rural"]), margin=1)
+
+
+ctable(x=as.character(DF$age), y=DF$region, 
+       prop ="c", 
+       chisq = TRUE) 
+```
+
+Ejercicio propuesto:
+
+Utiliza funciones de R para responder cada una de las siguientes preguntas. Utiliza la base de datos "Tobacco.csv". 
+
+1. Etiqueta la variable "age". 
+2. Construye una tabla de frecuencia absoluta para la variable "region". 
+3. Construye una tabla de frecuencia relativa para la variable "ocupation". 
+4. Construye una tabla de frecuencia relativa para las variables "region" y "ocupation. 
+5. ¿Qué porcentaje de los menores de 30 años tiene niños menores de 2 años. 
+6. ¿Qué porcentaje de los que viven en "brussels" gástan dinero en tabaco?
+
+
+
+# Estadísticos descriptivos
+
+## - ¿Qué preguntar a nuestros datos?
+
+Dos preguntas surgen siempre al principio de cualquier AED:
+
+1. Cuál es el valor central de mis variables
+
+2. ¿Qué tipo de variación se produce dentro de mis variables?
+
+3. ¿Qué tipo de correlación hay entre mis variables?
+
+
+
+## - Medidas de tendencia central
+
+Para este apartado utilizaremos las variables de la base de datos "Medidas.xlsx". Carga los datos y realiza una primera exploración de los mismos.
+
+```{r}
+library(readxl)
+Medidas <- read_excel("Medidas.xlsx")
+
+head(Medidas)
+
+```
+Utilizo la función range(...) para obtener el valor máximo y mínimo de una variable, Por ejemplo la altura. Otras funciones, max(...) y min(...).
+
+```{r}
+range(Medidas$altura)
+
+```
+
+### Media: función mean(...)
+Para calcular la media aritmética de una variable cuantitativa se usa la función mean(...). Los argumentos de la función mean son tres: x (objeto sobre el que calculo la media), trim = , (fracción de observaciones que son excluidas del cálculo) na.rm = FALSE, (función lógica para eliminar "TRUE" las observaciones missing).
+
+Supón que queremos obtener la altura media de los estudiantes. Calcula también la altura media eliminado el 5% de las observaciones más bajas y más altas.
+
+```{r}
+mean(Medidas$edad)
+mean(Medidas$altura, trim=0.05)
+```
+
+Suponga que ahora queremos la altura media pero de hombres y mujeres por separado.
+
+```{r}
+mean(Medidas$altura[Medidas$sexo=="Hombre"])
+mean(Medidas$altura[Medidas$sexo=="Mujer"])
+```
+
+Otra alternativa, utilizando la función aggregate(...)
+
+```{r}
+aggregate(Medidas$altura, by=list(Medidas$sexo), mean)
+```
+
+### Mediana: función median(...) y quantile(...)
+Calcula la edad mediana de los estudiantes de la base de datos, así como el percentil 32 de la variable peso.
+
+```{r}
+median(Medidas$edad)
+quantile(Medidas$altura, probs = 0.32)
+
+```
+
+Calcula el recorrido intercuartílico de la variable altura.
+
+```{r}
+Q <- quantile(Medidas$altura, probs = c(0.25, 0.75))
+Q
+
+R.I <- unname(Q[2]) -unname(Q[1])
+R.I
+
+# Hay una función propia en R base
+
+IQR(Medidas$altura)
+```
+
+Ejercicio:
+
+1. ¿Cuál es la estatura mínima y máxima de los sujetos de la muestra? ¿Y la de los varones? ¿Y la de las mujeres?
+2. ¿Qué porcentaje de sujetos tiene una estatura menor de 1,65 m.?
+3. ¿Cuál es el valor central de la variable estatura? ¿Y de la variable peso?
+4. Obtenga el valor del peso que es superado sólo por el 15% de la muestra.
+5. ¿Cuántos mujeres hay en la muestra?
+6. ¿Qué porcentaje de hombres tiene un tamaño de muñeca superio a 11?
+7. ¿Quiénes tienen mayores biceps, los hombres o las mujeres?
+
+
+### Medidas de dispersión: Varianza y Desviación Típica (muestral)
+
+```{r}
+var(Medidas$edad)
+
+sd(Medidas$altura)
+
+```
+
+Matriz de varianzas y covarianzas. La función var(...) se puede aplicar sobre un marco de datos, por ejemplo variables de un data.frame. Obteniendo en la diagonal principal las varianzas individuales y fuera de ella las covarianzas.
+
+```{r}
+var(Medidas)
+
+var(Medidas[-4]) # aliminando la variable sexo
+
+```
+
+### Medidas de correlación
+
+La función cor(...) permite calcular el coeficiente de correlación de Pearson, Kendall o Spearman para dos variables cuantitativas.
+
+```{r}
+
+cor(Medidas$peso, Medidas$altura, method="pearson")
+
+with(Medidas, cor(peso, altura, method="kendall"))
+```
+
+Con la función cor.test(...) podemos contrastar estadísticamente si la correlación obtenida es distinta de cero.
+
+```{r}
+with(Medidas, cor.test(peso, altura))
+```
+
+
+### Tabla de principales descriptivos
+
+Para finalizar el análisis descriptivo a partir de las funciones de R base. Mencionar la función summary(...) como un buen resumen de estadísticos principales. Esta función se puede aplicar sobre vectores o sobre la base de datos (data.frame) en su conjunto.
+
+```{r}
+summary(Medidas$altura)
+
+summary(Medidas)
+```
+
+Ejercicio:
+
+Leer los datos del fichero "numberofwords.csv".
+
+1. Calcular la media, mediana, de las variables "region" y "ageat1W".
+2. Calcula la media recortada de la variable "ageat1w" con una proporción del 0,05,
+3. Calcular los percentiles 10% y 90% en la variable "words".
+4. Comprueba si existe relación lineal en tre las variables "word" y "ageat1w".
+5. Supongamos que se han seguido recogiendo datos de esta variable "words". En concreto se añaden 4 observaciones a la muestra con los siguientes valores: 23 34 78 y 89. Calcula la varianza y desviación típica.
+
+## - Análisis descriptivo utilizando el paquete "summarytools"
+
+Al igual que para el análisis de frecuencia, existen muchos paquetes con funciones específicas para realizar el análisis de principales estadísticos. Utilizaremos el paquete "summarytools". A modo de ejemplo trabajaremos de nuevo con el dataset "numberofwords.csv". Utilizamos la función descr(...)
+
+```{r}
+# Cargo de nuevo los datos
+DF <- read.csv("numberofwords.csv")
+descr(DF$ageat1w) # Descriptivos de una variable concreta 
+descr(DF) # Descriptivos del total de variables numéricas
+
+descr(DF[,c(2,5:8)],
+      stats     = c("mean", "sd"),
+      transpose = TRUE,
+      headings  = FALSE)
+
+#view(dfSummary(DF[,-1]))
+```
+
+# Pruebas de hipótesis
+
+## - Pruebas para una muestra
+
+### Prueba de hipótesis sobre la media de una población normal
+
+Empezaremos con el contraste de hipótesis sobre una muestra en poblaciones normales. Para realizar este tipo de prueba se puede usar la función t.test(...) de R base. Para mostrar cómo funciona esta función utilizaremos el dataset "heartrate.dta".
+
+Lo primero, contrastar la normalidad de mi variable. Trabajamos primero con la variable heartrate1. Una manera visula de verificar la normalidad es mediante un histograma.
+
+```{r}
+# Cargo los datos
+library(haven)
+heartrate <- read_dta("heartrate.dta")
+hist(heartrate$heartrte1, col='steelblue')
+```
+
+El histograma nos muestra un valor extremo (outlier) a la derecha. Es probable que dicho valor afecte al test de normalidad. Lo comprobamos.
+
+```{r}
+shapiro.test(heartrate$heartrte1)
+
+shapiro.test(heartrate$heartrte1[heartrate$heartrte1<120])
+
+```
+
+La presencia de dicho outlier podría afectar al resultado del contraste.
+
+```{r}
+t.test(heartrate$heartrte1, alternative='two.sided',
+       conf.level=0.95, mu=80)
+
+t.test(heartrate$heartrte1[heartrate$heartrte1<120], alternative='two.sided',
+       conf.level=0.95, mu=80)
+
+```
+
+En ambos contrastes no puedo aceptar la hipótesis nula. Realiza ahora el análisis sobre la variable heartrate2 que mide las pulsaciones despues de tratar al paciente.
+
+Aunque la prueba t es relativamente sólida frente a desviaciones de la distribución normal, especialmente en muestras grandes, a veces debemos evitar el supuesto de normalidad. Como alternativa utilizaremos los contrastes no paramétricos. El contraste no-paramétrico equivalente a la prueba t es la prueba de los rangos con signo de Wilcoxon.
+
+```{r}
+wilcox.test(heartrate$heartrte1, alternative='two.sided', mu=80)
+
+```
+
+Ejercicio:
+
+Un artículo recogía los resultados de un estudio para investigar las concentraciones de mercurio en las lubinas de una granja marina. Se tomaron muestras de 53 jaulas en alta mar y se midió la concentración de mercurio en el tejido muscular (ppm). Los valores observados fueron: 1.230, 1.330, 0.040, 0.044, 1.200, 0.270, 0.490, 0.190, 0.830, 0.810, 0.710, 0.500, 0.490, 1.160, 0.050, 0.150, 0.190, 0.770, 1.080, 0.980, 0.630, 0.560, 0.410, 0.730, 0.590, 0.340, 0.340, 0.840, 0.500, 0.340, 0.280, 0.340, 0.750, 0.870, 0.560, 0.170, 0.180, 0.190, 0.040, 0.490, 1.100, 0.160, 0.210, 0.860, 0.520, 0.650, 0.270, 0.940, 0.400, 0.430, 0.250, 0.270.
+Se pide:
+
+1) Construir un intervalo de confianza para la media con nivel de confianza
+0,90. 2) Contrastar la hipótesis nula de una concentración media menor o igual a
+0,7. 3) Contrastar la hipótesis nula de una concentración media igual a 0,7.
+
+
+## - Pruebas para dos muestras
+
+### Muestras independientes
+
+Ahora comparamos dos poblaciones. De cada una de ellas disponemos de una muestra. Veamos cuando dichas muestras son independientes. Por ejemplo, los latidos en hombres y mujeres.
+
+
+```{r}
+Male <- heartrate$heartrte1[heartrate$sex==1]
+Female <- heartrate$heartrte1[heartrate$sex==2]
+
+t.test(Male, Female, paried=FALSE, 
+       var.equal=TRUE)
+
+t.test(heartrate$heartrte1~heartrate$sex, paried=FALSE, 
+       var.equal=TRUE)
+
+wilcox.test(heartrate$heartrte1~heartrate$sex, paried=FALSE)
+
+```
+
+Contraste sobre las varianzas
+
+```{r}
+var.test(heartrate$heartrte1~heartrate$sex)
+
+```
+
+### Muestras pareadas
+
+Muestras no independientes emparajadas uno a uno. Probemos a contrastar las diferencias en el número de pulsaciones en el examen 1 frente al examen 2.
+
+
+```{r}
+var.test(heartrate$heartrte1, heartrate$heartrte2)
+
+t.test(heartrate$heartrte1, heartrate$heartrte2, paried=TRUE, 
+       var.equal=TRUE)
+
+wilcox.test(heartrate$heartrte1, heartrate$heartrte2, paried=TRUE, 
+       var.equal=TRUE)
+
+```
+
+## - Pruebas de hipótesis para proporciones
+
+### - Pruebas para una muestra
+
+Utiliza el dataset de Stata "healthdisparities.dta". Contrastamos en primer lugar si el porcentaje de personas pobres de mi muestra puede ser igual al 10%. Tenemos dos posibilidades:
+
+```{r}
+library(haven)
+HD <- read_dta("healthdisparities.dta")
+
+```
+En primer lugar calcula cuál es el númerototal de pobres de mi muestra.
+
+```{r}
+# Si la muestra es pequeña
+binom.test(44, 63, p = .1, alternative = "two.sided")
+
+# Para muestras grandes
+prop.test(44, 63, p = .1, alternative = "two.sided")
+
+```
+
+## - Pruebas para varias muestras
+
+Por ejemplo, compara la propoción de individuos que ha acudido al médico al menos una vez en los últimos 12 méses, diferenciando entre pacientes pobres y no pobres.
+
+
+```{r}
+chisq.test(HD$doctor, HD$poverty)
+
+```
+
+¿Recuerdas cómo se hacía con el paquete "summarytools"?
+
+
+Ejercicio:
+
+El fabricante de un contraste para pruebas radiológicas afirma que su producto es visible en el 90 % de todas las radiografías de cadera. Para poner a prueba esta afirmación se realizan 200 radiografías y en 174 se percibe el contraste correctamente. Prueba la afirmación del fabricante a un nivel de significación alfa = 0.01.
+
+
+# - Correlación y regresión
+
+Como ya sabemos, la función cor(...) calcula la correlación de Pearson entre dos variables, X e Y, medidas a nivel cuantitativo. Por ejemplo, la correlación entre altura y peso en el data.frame "Medidas" se obtiene mediante:
+
+```{r}
+library(readxl)
+Medidas <- read_excel("Medidas.xlsx")
+
+with(Medidas, cor(altura, peso))
+```
+
+Cuando trabajamos con más de dos variables nos puede resulta útil elaborar un diagrama de dispersión que nos proporcione una visual rápida de las posibles asociaciones entre pares de variables. La función pairs(...) es la adecuada. 
+
+```{r}
+pairs(Medidas[-4]) # dejo fuera la variable sexo
+```
+
+con los siguientes valores en la matriz de correlaciones
+
+```{r}
+cor(Medidas[-4])
+```
+
+¿y por qué no, todo junto? Utilizando el paquete "PerformanceAnalytics"
+
+```{r}
+library(PerformanceAnalytics)
+chart.Correlation(Medidas[-4])
+```
+
+
+## Modelos de regresión lineal
+
+Para ilustrar las funciones de R comenzaremos con una sencilla aplicación con datos del dataset, "calcium.csv". Carga los datos y explora su contenido.
+
+```{r}
+calcium <- read.csv("calcium.csv")
+```
+
+La función lm(...) es la función de R base para estimar modelos lineales. Si la aplicamos a nuestro ejemplo:
+
+```{r}
+lm(weight ~ dose, data=calcium)
+```
+
+La función sólo muestra el intercepto (término constante) y el coeficiente de la variable explicativa. No muestra medidas de bondad del ajuste, contrastes estadísticos, etc. Para ello debemos guardar la estimación en un objeto. Por ejemplo M1, sobre el cual utilizamos las funciones summary(...) y confint(...):  
+
+```{r}
+M1 <- lm(weight ~ dose, data=calcium)
+summary(M1)
+confint(M1, level=0.95)
+```
+
+Aunque en próximas sesiones ampliaremos las posibilidades del analálisis gráfico con R, aquí utilizaremos un sencillo scatter plot para ilustrar nuestro ejemplo.
+
+```{r}
+plot(weight ~ dose, data = calcium)
+abline(M1)
+```
+
+Para valorar la calidad de mi ajuste y el cumplimiento de las hipótesis básicas detrás de un modelo de regressión lineal, conviene obtener la predicción y el residuo (errores) del modelo. Esto lo haremos con las funciones predict(...) y residuals(...).
+
+```{r}
+predict(M1)
+residuals(M1)
+```
+
+La predicción puede ser sobre un valor concreto, calculando además su intervalo de confianza.
+
+```{r}
+predict(M1, newdata = data.frame(dose=4), interval = 'confidence')
+```
+
+Visualmente la función plot(...), aplicada sobre el objeto que guarda el análisis de regresión, proporciona un interesante diagnóstico del modelo:
+
+```{r}
+par(mfrow=c(2,2))
+plot(M1)
+par(mfrow=c(1,1))
+```
+
+Gráfico 1.
+El primer gráfico muestra si los residuos tienen patrones no lineales. Podría haber una relación no lineal entre las variables predictoras y la variable de resultado y el patrón debería aparecer en este gráfico. Si el gráfico muestra residuos igualmente distribuidos alrededor de la horizontal, se verfica la relación lineal.
+
+Gráfico 2.
+Este gráfico muestra si los residuos se distribuyen normalmente. Esto se cumple cuando los residuos están bien alineados con la línea recta discontinua.
+
+Gráfico 3.
+El objetivo de este gráfico es comprobar la hipótesis de homocedasticidad. El gráfico muestra cómo se distribuyen los residuos a lo largo de los rangos de los predictores. En el supuesto de igualdad de varianza (homocedasticidad) deberá dibujar una línea horizontal con puntos de distribución al azar (sin ningún patrón).
+
+Gráfico 4.
+El último gráfico nos ayuda a encontrar casos influyentes (outliers). No todos los valores atípicos influyen en el análisis de regresión lineal. Esta vez los patrones no son relevantes. Buscamos la presencia de casos atípicos observando los puntos y las líneas discontinuas basadas en la distancia de Cook. Cuando los casos están fuera, éstos tienen potencial para influir en los resultados de la regresión. En otras palabras, los resultados del modelo se verán alterados si excluimos dichos casos.
+
+Comprueba cómo se comporta el modelo cuando inluimos la variable "sex" en el vector de variables explicativas.
+
+```{r}
+M2 <- lm(weight ~ dose + as.factor(sex), data=calcium)
+summary(M2)
+```
+
+Compara ambos modelos a partir del estadístico "Raíz del error cuadrático medio" (RMSE en inglés). Lo podemos hacer nosotros mismos:
+
+```{r}
+RMSE.M1 <-sqrt(mean(M1$residuals^2))
+RMSE.M2 <-sqrt(mean(M2$residuals^2))
+```
+
+o mediante la función rmse(...) disponible en el paquete "Metrics"
+
+```{r}
+library(Metrics)
+rmse(calcium$weight, predict(M1))
+```
+
+Finalizamos este primer ejemplo, incorporando una interacción entre las variables "sex" y "dose". ¿Consideras justificada esta interacción?
+
+```{r}
+M3 <- lm(weight ~ dose*as.factor(sex), data=calcium)
+summary(M3)
+```
+
+Con R base podemos comparar los modelos mediante la función anova(...), que muestra un estadístico de contraste F para determinar si la diferencia entre modelos es estadísticamente significativa o no.
+
+```{r}
+anova(M1, M2, M3)
+```
+
+Ejercicio 1:
+
+El dataset hiaa.dta (en formato Stata) incluye mediciones del examen A5-HIA en la orina en 40 pacientes, con el objeto de medir la cantidad de ácido 5-hidroxindolacético (A5-HIA). Este ácido es un producto de degradación de la serotonina. 
+
+1. Describa la dependencia de los dos parámetros de laboratorio ("hiaa" y "sero") con la edad y el sexo de los pacientes.
+2. ¿Podemos concluir que la excreción urinaria de 5-HIAA varía con la edad?
+3. ¿Cuál es la excreción esperada de 5-HIAA para un hombre de 49 años?
+4. ¿Cuál es la diferencia esperada de la excreción urinaria de 5-HIAA entre dos mujeres que difieren en 13 años de edad? Calcula también el intervalo de confianza de dicha predicción.
+
+
+Ejercicio 2:
+En un estudio sobre la actividad física de los escolares se obtuvieron medidas de 323 niños de entre 6 y 10 años. La muestra se dividió en niños de zonas rurales y urbanas. Fichero "physact.dta".
+
+1. Calcula el valor medio del índice de actividad física en cada tipo de región. 
+
+2. ¿Puedes considerar la diferencia de índices estadísticamente significativa?
+
+3. Sin embargo, el estudio se realizó seleccionando algunas escuelas y midiendo una muestra de niños de 1° a 4° grado dentro de cada escuela. El proceso de contacto con los niños tomó más tiempo en las escuelas rurales y, además, es posible que los niños de las áreas urbanas se incorporren al colegio a una edad más temprana. Verifica si podemos asumir que la media de edad de los niños es menor en los niños urbanos que en los rurales.
+
+4. Trata de hacer una comparación más eficaz entre los niños rurales y urbanos con respecto a su actividad física media, teniendo en cuenta el desequilibrio en la distribución por edades.
+
+5. ¿Deberíamos tener en cuenta también el género de los niños en este análisis?
+
+### La regresión por pasos
+La regresión por pasos es un procedimiento ampliamente utilizado para seleccionar únicamente aquellas variables independientes que resultan "útiles" al modelo. A continuación mostramos una aplicación con la función step(...), a partir de los datos del ejercicio anterior.
+
+```{r}
+library(haven)
+phy <- read_dta("phyact.dta")
+
+reg <- lm(phyact ~ age + sex + region, data=phy)
+step(reg,diretion="both")
+```
+
+El resultado nos señala como modelo preferido, aquel que sólo incorpora las variables age y sex.
+
+
+## Modelos de respuesta discreta
+En el análisis de datos es frecuente encontrarse con variables dicotómicas (sí/no, presencia /ausencia),o variables medidas en escala ordinal (intervalos de edad, medidas de una prueba médica, etc.). Una práctica usual, es tratar este tipo de variables como si fueran continuas, asignándoles una puntuación arbitraria basada en la codificación de las distintas categorías de respuesta.
+
+En los modelos de respuesta binaria o dicotómica, la variable de respuesta Y puede tomar dos valores, codificados usualmente como 1 para la categoría de interés y 0 para la otra. Presentaremos cómo estimar en R las especificaciones "logit" y "probit".
+
+### Modelo de regresión logística
+
+Utilizaremos la función glm(...). Para ilustrar su manejo utilizamos el dataset "allergy1.dta". Nuestra variable de interés es "allergyc" que toma valor 1 si el niño ha desarrollado una alergia antes de los 6 años.
+
+Carga los datos y explora su contenido.
+
+```{r}
+library(haven)
+alle <- read_dta("allergy1.dta")
+names(alle)
+```
+
+Veamos una tabla cruzada entre la alergia en la madre frente a la alergia en el niño. 
+
+
+```{r}
+with(alle, table(allergyc, allergym))
+```
+
+Ampliemos la tabla anterior añadiendo el riesgo relativo de que el niño padezca alergia, dependiendo de si la madre tiene o no alergia. Calculamos también los odds y el odds ratio.
+
+```{r}
+TAB1 <-with(alle, table(allergym, allergyc))
+TAB2 <- cbind(TAB1, Total = rowSums(TAB1))
+TAB3 <- cbind(TAB2, Freq = TAB1[,2]/rowSums(TAB1)*100)
+TAB4 <- cbind(TAB3, odds = c(TAB3[1,4]/(100-TAB3[1,4]), 
+                             TAB3[2,4]/(100-TAB3[2,4])))
+TAB5 <- cbind(TAB4, OR = c(TAB4[2,5]/TAB4[1,5], NA))
+
+TAB5
+```
+
+Los resultados anteriores deben coincidir con los obtenidos en una regresión logística. Para estimar un modelo logit en R utilizamos la función glm(...), especificando link=logit.
+
+```{r}
+Mod1 <- glm(allergyc ~ allergym, family=binomial(link = "logit"), data=alle)
+summary(Mod1)
+```
+Los coeficientes anteriores muestran el score, para obtener los odds ratio bastará con calcular la exponencial de los mismos.
+
+```{r}
+exp(cbind(OR = coef(Mod1), confint(Mod1)))
+```
+
+A continuación vamos a incorporar al modelo la variable "smokem" y lo voy a hacer como interacción con "allergy",
+
+```{r}
+Mod2 <- glm(allergyc ~ allergym*smokem, family=binomial, data=alle)
+summary(Mod2)
+```
+
+Sobre el modelo anterior me interesa obtener el OR en las madres no fumadores y el OR en las madres fumadoras. Para las primeras es muy fácil. En las segundas es algo más complejo pero te doy una solución "imaginativa".
+
+```{r}
+# OR madre no fumadora
+exp(coef(Mod2)[2])
+exp(confint(Mod2)[2,])
+
+# OR madre fumadora
+exp(sum(coef(Mod2)[c(2,4)])) # pero no sirve para el intervalo de confianza
+
+alle$smokemr = 1-alle$smokem
+
+Mod2b <- glm(allergyc ~ allergym*smokemr, family=binomial, data=alle)
+exp(coef(Mod2b)[2])
+exp(confint(Mod2b)[2,])
+```
+
+Otra alternativa es utilizar el paquete "epitools"
+
+```{r}
+library(epitools)
+
+oddsratio(as.factor(alle$allergym)[alle$smokem==0], 
+          as.factor(alle$allergyc)[alle$smokem==0])
+
+oddsratio(as.factor(alle$allergym)[alle$smokem==1], 
+          as.factor(alle$allergyc)[alle$smokem==1])
+
+```
+
+La función anova(...) de nuevo me permite valorar si el segundo modelo mejora al primero
+
+```{r}
+anova(Mod1, Mod2, test="Chisq")
+```
+
+Al igual que en el modelo lineal existen una serie de funciones para obtener los valores predichos por el modelo. Utilizaremos predict(...)
+
+```{r}
+prob.ajustadas <- predict(Mod1, type = "response", se.fit = TRUE)
+
+prob.ajustada_0 <- predict(Mod1, newdata = data.frame(allergym=0),
+                          type = "response", se.fit = TRUE)
+
+prob.ajustada_1 <- predict(Mod1, newdata = data.frame(allergym=1),
+                          type = "response", se.fit = TRUE)
+```
+
+se.fit=TRUE me proporciona el error esándar de cada valor predicho, el cual utilizo para contruir los intervalos de confianza al 95% (valor crítico 1.96).
+
+
+```{r}
+intervalo_0 <- c(prob.ajustada_0$fit - 1.96 * prob.ajustada_0$se.fit, 
+               prob.ajustada_0$fit + 1.96 * prob.ajustada_0$se.fit)
+
+
+intervalo_1 <- c(prob.ajustada_1$fit - 1.96 * prob.ajustada_1$se.fit, 
+                 prob.ajustada_1$fit + 1.96 * prob.ajustada_1$se.fit)
+```
+
+### Medidas de bondad del ajuste basadas en la clasificación. Curvas ROC
+
+Con estas medidas buscamos conocer que éxito tiene mi modelo para predecir correctamente. Para ello cruzaremos la tabla de frecuencia de mi variable original (variable dependiente) con la asignación que realiza mi modelo respecto a un punto de corte.
+
+```{r}
+Tvi <- table(alle$allergyc)
+
+Mod1.predi <- ifelse(fitted.values(Mod1) >=Tvi[2]/Tvi[1] , 1, 0)
+table(Mod1.predi)
+
+table(alle$allergyc, Mod1.predi)
+
+Tabla.cla <-prop.table(table(alle$allergyc, Mod1.predi))
+
+total.bienp=Tabla.cla[1,1]
+total.bienp
+```
+prueba a obtener la misma tabla con "prob.ajustada_1$fit" como punto de corte.
+
+Dos estadísticos importantes para añadir a los anteriores: la "Sensibilidad" y la "Especificidad". La sensibilidad=Verdaderos.positivos/(Verdaderos.positivos+Falsos.negativos) y la especificidad=Verdadero.negativos/(verdaderos.negativos+falsos.positivos).
+
+Finalmente, para dibujar la curva de ROC, utilizaremos el paquete "epitools" el cual facilita también el cálculo del área bajo la curva "AUC".
+
+
+```{r}
+library(ROCR)
+pred <- prediction(fitted.values(Mod1), as.factor(alle$allergyc))
+roc.perf <- performance(pred, measure = "acc")
+
+AUC <- performance(pred, measure = "auc")
+AUC <- AUC@y.values[[1]]
+AUC
+
+roc.perf = performance(pred, measure = "tpr", x.measure = "fpr")
+plot(roc.perf)
+abline(a=0, b= 1)
+text(0.4, 0.6, paste("AUC", "\n", round(unlist(AUC),3)), cex = 0.8)
+```
+
+Se considera que un modelo es mejor que otro si la curva ROC se acerca al borde superior izquierdo,
+o lo que es lo mismo, que el área bajo la curva sea mayor.
+
+Ejercicio:
+
+En el estudio mencionado anteriormente sobre el desarrollo de alergias en la primera infancia, también se registró información sobre el estado de tabaquismo y alergia del padre. Esta información se puede encontrar en el dataset "allergy2.dta".
+
+1. Calcule el odds ratio entre el estado de alergia del padre y el estado de alergia del niño y ajuste ésta para el efecto del tabaquismo paterno.
+
+2. ¿Qué sucede si ajusta el estado de alergia materna en lugar del tabaquismo paterno?
+
+3. Si hace una tabulación cruzada entre el estado alérgico de la madre y el tabaquismo paterno (¡hazlo!), encontrará una tendencia a que las madres con alergia tienden a tener una pareja que no fuma. Si ajusta un modelo de regresión logística con alergia materna, tabaquismo materno y tabaquismo paterno (¡hazlo!), puede ver que el tabaquismo paterno influye en el estado de alergia del niño. Esto sugiere que el tabaquismo paterno es un factor de confusión para la asociación entre el estado de alergia de la madre y el estado de alergia del niño. Sin embargo, si eliminamos en el modelo anterior la covariable del tabaquismo paterno (¡hazo!), podemos observar que el odd ratio para la alergia materna no cambia.
+
+4. Ajuste un modelo de regresión logística con las cuatro covariables. ¿Qué podemos concluir de este análisis con respecto al efecto de las covariables individuales? ¿Podemos decir algo sobre la covariable con el efecto más pequeño y más grande? ¿Cuál es la diferencia de probabilidad estimada de desarrollar una alergia entre un hijo de padres fumadores que ambos padecen alergias y un hijo de padres no fumadores y sin alergias?
+
+5. Termina el ejercicio haciendo un análisis completo de la capacidad predictiva del modelo con cuatro covariables.
+
+Ejercicio propuesto:
+
+El conjunto de datos de dolor de espalda "backpain.dta" incluye datos de un estudio epidemiológico sobre la aparición de dolor de espalda. Hay información sobre la edad, el sexo y la clase social de los sujetos, su ocupación física al inicio del estudio y si padecían dolor de espalda al inicio (variable b0) y 5 años después (variable b5).
+
+1. ¿Qué podemos concluir acerca de las diferencias entre los cuatro tipos de ocupaciones físicas al inicio del estudio con respecto al estado del dolor de espalda cinco años después, si ajustamos por edad y sexo?
+2. ¿Qué podemos concluir sobre el efecto de la edad y el sexo? Trate de expresar la diferencia de sexo como una razón de probabilidades (OR).
+3. Uno de los objetivos del estudio fue establecer que la ocupación física alta es más peligrosa que la ocupación física moderada con respecto al desarrollo del dolor de espalda. ¿Qué podemos concluir acerca de esta diferencia?
+4. ¿Qué sucede si ajustamos por clase social?
+5. Repita el análisis del apartado 1. considerando ahora el dolor de espalda al inicio del estudio como el resultado de interés.
+
+
+
+### Modelo de regresión probit
+
+Utilizamos también la función glm(...) y el dataset "allergy1.dta". Carga los datos y explora su contenido.
+
+```{r}
+library(haven)
+alle <- read_dta("allergy1.dta")
+```
+
+Para estimar un modelo probit en R utilizamos la función glm(...), especificando link=probit.
+
+```{r}
+Mod1 <- glm(allergyc ~ allergym, family=binomial(link = "probit"), data=alle)
+summary(Mod1)
+```
+
+# Ya eres un experto/a en análisis de datos con R
+
+¿Te atrevés con datos reales? ¿Qué tal los datos para España de la última encuesta europea de salud?
+
+
+
