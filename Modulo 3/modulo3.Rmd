@@ -1,0 +1,457 @@
+---
+title: "Analisis gráfico con R"
+subtitle: "Gráficos con R base"
+
+author: "Jaime Pinilla - C. González-Martel"
+date: "27/10/2022"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    lib_dir: libs
+    css: ["rutgers", "rutgers-fonts", "custom.css"]
+    nature:
+      beforeInit: "../Modulo 1/js/ru_xaringan.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+
+    includes:
+      in_header: "header.html"
+
+---
+
+# Análisis gráfico con R
+
+
+1. [Gráficos con la función plot de R base.](#plot)
+
+    1.1 [Gráficos univariantes](#univariantes)
+    
+    1.2 [Gráficos bivariantes](#bivariantes)
+    
+    1.3 [Gráficos múltiples](#multiples)
+    
+    1.4 [Exportación](#exportacion)
+
+2. [Preparación de datos para el análisis gráfico.](#preparacion)
+
+
+---
+
+
+class:  inverse, center, middle
+name: plot
+
+# Gráficos con la función plot de R base.
+
+---
+
+
+
+<ru-blockquote> `plot()` es la función básica para generar gráficos en R.</ru-blockquote>
+
+* El gráfico resultante dependerá del tipo de objeto que se le pase a la función `plot()`.
+
+```{r}
+methods(plot)
+```
+
+* Existen otras funciones para genrar ciertos tipos de gráficos como `boxplot()`, `hist()`, `barplot()`
+
+* El gráfico resultante se genera en una ventana gráfica (graphic.device()), que puede ser la pantalla, la pestaña *Plots* de Rstudio o un archivo gráfico, si así se lo indicamos.
+
+
+
+---
+class:  center, middle
+name: univariantes
+
+## Gráficos univariantes.
+
+---
+## Gráficos univariantes.
+
+* [scatterplot](#scatterplot) [Diagrama de dispersión]
+
+* [Boxplot](#boxplot). [Diagramas de caja]
+
+* [Barplot](#barplot). [Gráfico de barras]
+
+* [Histogramas](#histograms)
+
+
+
+---
+```{r, message=FALSE}
+numberofwords <- readr::read_csv("../Modulo 2/numberofwords.csv")
+str(numberofwords)
+
+```
+
+---
+
+name:scatterplot
+
+### Scatterplot. Diagrama de dispersión
+
+```{r, fig.height=7, fig.width=10.5}
+plot(numberofwords$words)
+```
+
+---
+
+#### Personalización 
+
+* **type**: Formato del scatterplot.
+
+    - "p" puntos,
+
+    - "l" líneas,
+
+    - "b" ambos,
+
+    - "h" 'histograma', líneas verticales de alta densidad,
+
+    - "s" escalones,
+
+    - "S" otro tipo de escalones,
+
+    - "n" sin gráfico.
+
+---
+#### Personalización (puntos)
+
+* **cex**, **cex.main**, **cex.sub**, **cex.xlab**, **cex.ylab**: Tamaño del punto intersección.
+
+* **pch**: Forma del punto de intersección.
+
+.center[![pch](https://www.statmethods.net/advgraphs/images/points.png)]
+
+
+
+---
+
+#### Personalización (líneas)
+
+* **lty**: Forma de la línea.
+
+.center[![pch](https://www.statmethods.net/advgraphs/images/lines.png)]
+
+* **lwd**: Grosor de la línea o del borde del punto con respecto al grosor por defecto (`lwd=1`). P.ej. `lwd=2` es el doble con respecto al grosor de la línea por defecto.
+
+
+---
+
+#### Personalización (colores)
+
+* **main**, **sub**, **xlab**, **ylab**: Título de gráfico, subtítulo y nombre de los ejes x e y, respectivamente.
+
+* **col**: Color del borde del punto o color de la línea. Si es de puntos (`type="p"`) y se ha especificado valores de `pch` entre 21 y 25 se puede introducir el color de relleno con `bg=`. los colores se pueden establecer a través de [índices(números)](https://www.statmethods.net/advgraphs/images/colorchart.png),  [nombres](https://r-graph-gallery.com/img/graph/42-colors-names.png) entre comillas ("red", "blue", etc.) o por su [código hexadecimal](https://www.color-hex.com/). Por ejemplo, `col=1`, `col="white"` y `col="#FFFFFF"` son equivalentes a la hora de expresar el blanco.
+
+* **col.main**, **col.sub**, **col.xlab**, **col.ylab**,**col.axis** :  del título de gráfico, subtítulo y nombre de los ejes x e y, respectivamente.  
+
+
+
+---
+
+#### Personalización (fuentes)
+
+* **font**,**font.main**, **font.sub**, **font.xlab**, **font.ylab**: Fuente para los textos. 1=texto plano, 2=**negrita**, 3=*itálica*, 4= negrita itálica, 5=símbolos.   
+
+* **ps**: Tamaño del punto de la fuente. Tamaño de la fuente = `ps*cex`.
+
+* **col.main**, **col.sub**, **col.xlab**, **col.ylab**,**col.axis** :  del título de gráfico, subtítulo y nombre de los ejes x e y, respectivamente.  
+
+* `r fontawesome::fa("exclamation", fill = "red")` `r fontawesome::fa("exclamation", fill = "red")` **family**: Familia de la fuente. Serif, Sans, Mono, Symbol
+
+---
+```{r}
+windowsFonts(A = windowsFont("Times New Roman"))
+```
+
+.center[
+```{r, fig.height=7, fig.width=10.5}
+
+plot(numberofwords$words, ylab = "Frecuencia", xlab = "Id. del bebé", main = "Número de palabras pronunciadas por bebés", sub = "Fichero: numberofwords.csv", pch = 21, bg = "#0073C2FF", col = "black", cex = 1.5, lwd = 0.9, frame = FALSE, family= "A")
+```
+]
+---
+name:boxplot
+
+### Boxplot
+
+.center[![boxplot](https://r-coder.com/wp-content/uploads/2020/06/boxplot-scheme.png)]
+
+<ru-blockquote> `boxplot()` considera *outliers* aquellos valores superiores a $Q_3+1.5\cdot IQR$ e inferiores a $Q_1-1.5\cdot IQR$.</ru-blockquote>
+
+.footnote[[IQR](https://en.wikipedia.org/wiki/Interquartile_range): rango intercuartílico en sus siglas en inglés)]
+---
+
+
+```{r}
+summary(numberofwords$words)
+```
+.center[
+```{r}
+boxplot(numberofwords$words)
+```
+]
+---
+
+#### Personalización 
+
+* **col**: Color de la caja del gráfico.
+
+* **outline**: Si es FALSE los valores *outliers* no se dibujan.
+
+* **horizontal**.
+
+---
+
+name:barplot
+
+### Barplot
+
+.left-column[
+```{r}
+table(numberofwords$age)
+```
+]
+
+.right-column[
+```{r, fig.height=5, fig.width=7}
+barplot(table(numberofwords$age), col = "aquamarine3",
+        xlab = "Edad", main = "Número de niños por edad (meses)")
+```
+]
+
+---
+.center[
+```{r, fig.height=7, fig.width=10.5}
+plot(factor(numberofwords$age), col = "aquamarine4",
+        xlab = "Edad", main = "Número de niños por edad (meses)")
+```
+]
+
+Probar con otras variables como region o gender
+---
+
+name:histogram
+
+### Histograma
+
+.center[
+```{r, fig.height=7, fig.width=10.5}
+hist(numberofwords$words, col = "#894160", xlab = "Número de palabras", ylab = "Frecuencia")
+```
+]
+---
+
+
+#### La función `rug`
+
+```{r, fig.height=7, fig.width=10.5}
+hist(numberofwords$words, col = "#894160", xlab = "Número de palabras", ylab = "Frecuencia")
+rug(numberofwords$words)
+```
+
+---
+
+#### Personalizar con el parámetro `breaks`
+
+```{r, fig.height=7, fig.width=10.5}
+hist(numberofwords$words, col = "#894160", xlab = "Número de palabras", ylab = "Frecuencia", breaks = 50)
+rug(numberofwords$words)
+```
+
+
+---
+class:  center, middle
+
+
+### Capas.
+
+---
+
+### Líneas de referencia
+
+> `abline(h = NULL, v = NULL, coef = NULL)`
+
+```{r, fig.height=5, fig.width=7}
+hist(numberofwords$words, col = "#894160", xlab = "Número de palabras", ylab = "Frecuencia", breaks = 50)
+rug(numberofwords$words)
+abline(v=mean(numberofwords$words, rm.na = T), lwd = 2, col="#41896a", lty = 2)
+```
+
+---
+
+### Anotaciones (texto)
+
+> `text()`
+
+```{r, fig.height=5, fig.width=7}
+hist(numberofwords$words, col = "#894160", xlab = "Número de palabras", ylab = "Frecuencia", breaks = 50)
+rug(numberofwords$words)
+abline(v = mean(numberofwords$words, rm.na = T), lwd = 2, col="#41896a", lty = 2)
+text(label = paste("media =", round(mean(numberofwords$words, rm.na = T), 4)), x = mean(numberofwords$words, rm.na = T), y = 45, pos = 4, col = "#41896a")
+```
+
+---
+class:  center, middle
+name: bivariantes
+
+## Gráficos bivariantes.
+
+---
+## Gráficos bivariantes.
+
+* [scatterplot](#scatterplot2d) [Diagrama de dispersión]
+
+* [Boxplot](#boxplot2d). [Diagramas de caja]
+
+* [Barplot](#barplot2d). [Gráfico de barras]
+
+
+---
+name:#scatterplot2d
+
+### Scatterplot o Gráficos de dispersión
+
+
+> Muestra la relación de dos variables numéricas
+
+```{r, message = FALSE, fig.height=5, fig.width=7}
+ratones <- readr::read_csv("../Modulo 2/calcium.csv")
+plot(x = ratones$dose, y = ratones$weight, xlab = "Dósis de fármaco (mg)", ylab = "Peso (gr)", frame = FALSE)
+# plot(weight ~ dose, data = ratones, xlab = "Dósis de fármaco (mg)", ylab = "Peso (gr)", frame = FALSE)
+
+
+```
+
+---
+### Añadir recta de regresión
+
+> Muestra la relación de dos variables numéricas
+
+```{r, message = FALSE, fig.height=5, fig.width=7}
+mod_lm <- lm(weight ~ dose, data = ratones)
+plot(weight ~ dose, data = ratones, xlab = "Dósis de fármaco (mg)", ylab = "Peso (gr)", frame = FALSE)
+lines(ratones$dose, predict(mod_lm), col = 2, lwd =2)
+
+```
+
+---
+### Añadir una tercera dimensión
+
+```{r, message = FALSE, fig.height=5, fig.width=7}
+plot(weight ~ dose, data = ratones, xlab = "Dósis de fármaco (mg)", ylab = "Peso (gr)", frame = FALSE, col = factor(ratones$sex))
+legend(x = "bottomright", legend = c("Macho", "Hembra"),  fill = c("red","black") ,  title = "Sexo")
+
+```
+
+---
+name:#boxplot2d
+
+### Boxplot o Gráficos de caja
+
+
+> Muestra la relación entre una variables categórica y otra numérica
+
+```{r, fig.height=5, fig.width=7}
+plot(words ~ factor(gender), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#608941","#416089"), outline = FALSE)
+# boxplot(words ~ factor(gender), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#608941","#416089"), outline = FALSE)
+```
+
+---
+name:#barplot2d
+
+### Barplot o Gráficos de barra
+
+
+> Muestra la frecuencia o valor de varias variables categóricas
+
+```{r, message = FALSE, fig.height=5, fig.width=7}
+library(dplyr)
+freq <- numberofwords %>% group_by(age, gender) %>% summarise(n = sum(words)) 
+barplot(n ~ gender + age, data = freq, beside = T, col = c("#608941","#416089"), legend = levels(factor(freq$gender)), args.legend  = list(x = "topleft", inset = 0.01))
+```
+
+
+---
+class:  center, middle
+name: multiples
+
+## Gráficos múltiples.
+
+---
+
+## Gráficos múltiples.
+
+> `par(mfrow, mfcol, mar)`
+
+```{r, fig.height=5, fig.width=7}
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+boxplot(words ~ factor(gender), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#608941","#416089"), outline = FALSE)
+boxplot(words ~ factor(region), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#894160","#41896a"), outline = FALSE)
+```
+
+---
+class:  center, middle
+name: exportacion
+
+## Exportación.
+
+---
+
+
+### Tipos de fichero
+
+* Vectoriales
+
+    - **pdf**. Redimensiona bien, fácilmente portable pero no es eficiente si contiene muchos objetos.
+    
+    - **svg**. Basado en lenguaje XML. Redimendiona bien y soporta animaciones y puede contener elementos interactivos. Para gráficos web.
+    
+    - **win.metafile**. Para palicaciones windows.
+    
+    - **postcript**. Mismas características que el pdf con el inconveniente añadido que windows no suele tener un visor para este tipo de fichero. 
+    
+* Bitmap
+
+    - **png**. Redimensiona mal, no emplea compresión. Para imágenes con colores sólidos.
+    
+    - **jpg**. Redimensiona mal, emplea compresión. Para fotografías y escenas naturales.
+    
+    - **tiff**. Alta calidad, sin compresión.
+    
+    - **bmp**. bitmap nativo de windows. 
+
+
+---
+
+
+```{r, eval=FALSE}
+pdf(file = "fig/now_boxplots.pdf", height = 7, width = 8.5)
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+boxplot(words ~ factor(gender), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#608941","#416089"), outline = FALSE)
+boxplot(words ~ factor(region), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#894160","#41896a"), outline = FALSE)
+dev.off()
+```
+
+```{r, eval=FALSE}
+png(file = "fig/now_boxplots.png", height = 480, width = 600)
+par(mfrow = c(1, 2), mar = c(5, 4, 2, 1))
+boxplot(words ~ factor(gender), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#608941","#416089"), outline = FALSE)
+boxplot(words ~ factor(region), data = numberofwords, xlab = "", ylab = "Número de palabras", frame = FALSE, col = c("#894160","#41896a"), outline = FALSE)
+dev.off()
+```
+---
+background-image: url(https://media.giphy.com/media/xThuWtYjkLvUvK4zp6/giphy.gif)
+background-size: cover
+
+
+
+
+
+
