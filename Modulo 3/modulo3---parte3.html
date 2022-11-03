@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Analisis gráfico con R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jaime Pinilla - C. González-Martel" />
+    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/rutgers.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rutgers-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+    <script src="libs/typedarray-0.1/typedarray.min.js"></script>
+    <script src="libs/jquery-3.5.1/jquery.min.js"></script>
+    <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        jax: ["input/TeX","output/HTML-CSS"],
+        "HTML-CSS": {
+                   styles: {
+                     '.MathJax_Display': {
+                        margin: "1.5em 0em"
+                      }               }
+                 }
+    });
+    </script>
+    <script type="text/javascript" src="/path/to/MathJax.js?config=TeX-AMS_HTML" charset="utf-8"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Analisis gráfico con R
+]
+.subtitle[
+## Gráficos con R base
+]
+.author[
+### Jaime Pinilla - C. González-Martel
+]
+.date[
+### 27/10/2022
+]
+
+---
+
+
+# Análisis gráfico con R
+
+
+1. [Gráficos interactivos con R.](#plotly)
+
+2. [Generación de informes.](#rmarkdown)
+
+3. [Encuesta europea de Salud en España](#EESE)
+
+
+---
+
+
+class:  inverse, center, middle
+name: plotly
+
+# Gráficos interactivos con R.
+
+---
+
+&gt; [**Ggplot**](https://ggplot2.tidyverse.org/) es una librería de R integrada dentro de `tidyverse` para la generación de gráficos estáticos complejos utilizando los principios de la gramática de gráficos de *Leland Wilkinson*.  
+
+.center[![The Grammar of Graphics](https://m.media-amazon.com/images/P/0387245448.01._SCLZZZZZZZ_SX500_.jpg)]
+
+---
+
+&gt; [**Plotly**](https://plotly.com/r/) es una librería de código abierto en R y se basa en el *framework* de JavaScript con el mismo nombre, plotly.js. El paquete Plotly ayuda a crear gráficos interactivos e intuitivos. También brinda la posibilidad de incrustar estos gráficos en páginas web guardarlos en sus computadoras. Se usa ampliamente junto con el paquete ggplot para hacer visualizaciones complejas, atractivas e interactivas para el usuario.
+
+.center[![Plotly](https://upload.wikimedia.org/wikipedia/commons/8/8a/Plotly-logo.png)]
+
+
+---
+## Base
+
+
+```r
+numberofwords &lt;- readr::read_csv("../Modulo 2/numberofwords.csv")
+plot(numberofwords$words, ylab = "Frecuencia", xlab = "Id. del bebé", main = "Número de palabras pronunciadas por bebés", sub = "Fichero: numberofwords.csv", pch = 21, bg = "#0073C2FF", col = "black", cex = 1.5, lwd = 0.9, frame = FALSE)
+```
+
+.center[
+![](modulo3---parte3_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+
+```r
+library(dplyr)
+library(ggplot2)
+numberofwords %&gt;%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point()
+```
+
+.center[
+![](modulo3---parte3_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+---
+
+### Enlaces
+
+* [geom_point](https://ggplot2.tidyverse.org/reference/geom_point.html)
+
+* [labs](https://ggplot2.tidyverse.org/reference/geom_point.html)
+
+* [themes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
+* [ggthemes](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
+
+---
+
+
+
+
+```r
+library(ggthemes)
+numberofwords %&gt;%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+```
+
+
+---
+class: center, middle
+![](modulo3---parte3_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+# Plotly
+
+
+
+```r
+# install.packages("plotly")
+library(plotly)
+
+migrafico &lt;- numberofwords %&gt;%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+
+ggplotly(migrafico)
+```
+
+---
+class: center, middle
+
+
+<div id="htmlwidget-970ac431a736a3f66036" style="width:720px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-970ac431a736a3f66036">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268],"y":[34,19,40,540,34,36,58,23,35,133,25,89,128,31,121,21,79,12,31,33,32,142,7,11,88,84,13,21,64,10,59,158,46,57,179,16,133,280,205,71,232,146,61,140,166,68,111,16,52,16,56,14,24,27,19,134,21,15,34,37,159,36,50,37,101,112,12,78,75,89,10,18,0,154,18,274,34,21,34,29,19,263,12,484,0,0,19,0,70,63,55,6,25,644,120,15,48,0,16,105,201,22,44,167,95,26,12,126,15,15,15,19,74,42,12,39,28,6,269,33,216,401,24,57,56,48,9,7,0,35,21,47,76,138,227,74,400,60,339,109,83,83,246,56,18,53,23,19,31,7,13,30,19,528,249,272,391,115,29,5,42,26,47,48,48,90,101,70,98,85,140,24,57,23,120,10,25,17,30,21,19,47,132,31,38,35,16,15,8,39,43,17,0,16,49,13,10,480,299,22,15,59,20,27,39,27,34,20,43,41,29,3,11,0,379,4,10,30,64,4,20,169,195,50,200,56,6,64,336,246,51,15,42,48,16,97,123,11,0,21,17,13,17,0,6,6,42,23,155,23,59,117,253,21,15,8,39,3,12,12,25,6,150,544,19,5,5,7],"text":["id:   1<br />words:  34","id:   2<br />words:  19","id:   3<br />words:  40","id:   4<br />words: 540","id:   5<br />words:  34","id:   6<br />words:  36","id:   7<br />words:  58","id:   8<br />words:  23","id:   9<br />words:  35","id:  10<br />words: 133","id:  11<br />words:  25","id:  12<br />words:  89","id:  13<br />words: 128","id:  14<br />words:  31","id:  15<br />words: 121","id:  16<br />words:  21","id:  17<br />words:  79","id:  18<br />words:  12","id:  19<br />words:  31","id:  20<br />words:  33","id:  21<br />words:  32","id:  22<br />words: 142","id:  23<br />words:   7","id:  24<br />words:  11","id:  25<br />words:  88","id:  26<br />words:  84","id:  27<br />words:  13","id:  28<br />words:  21","id:  29<br />words:  64","id:  30<br />words:  10","id:  31<br />words:  59","id:  32<br />words: 158","id:  33<br />words:  46","id:  34<br />words:  57","id:  35<br />words: 179","id:  36<br />words:  16","id:  37<br />words: 133","id:  38<br />words: 280","id:  39<br />words: 205","id:  40<br />words:  71","id:  41<br />words: 232","id:  42<br />words: 146","id:  43<br />words:  61","id:  44<br />words: 140","id:  45<br />words: 166","id:  46<br />words:  68","id:  47<br />words: 111","id:  48<br />words:  16","id:  49<br />words:  52","id:  50<br />words:  16","id:  51<br />words:  56","id:  52<br />words:  14","id:  53<br />words:  24","id:  54<br />words:  27","id:  55<br />words:  19","id:  56<br />words: 134","id:  57<br />words:  21","id:  58<br />words:  15","id:  59<br />words:  34","id:  60<br />words:  37","id:  61<br />words: 159","id:  62<br />words:  36","id:  63<br />words:  50","id:  64<br />words:  37","id:  65<br />words: 101","id:  66<br />words: 112","id:  67<br />words:  12","id:  68<br />words:  78","id:  69<br />words:  75","id:  70<br />words:  89","id:  71<br />words:  10","id:  72<br />words:  18","id:  73<br />words:   0","id:  74<br />words: 154","id:  75<br />words:  18","id:  76<br />words: 274","id:  77<br />words:  34","id:  78<br />words:  21","id:  79<br />words:  34","id:  80<br />words:  29","id:  81<br />words:  19","id:  82<br />words: 263","id:  83<br />words:  12","id:  84<br />words: 484","id:  85<br />words:   0","id:  86<br />words:   0","id:  87<br />words:  19","id:  88<br />words:   0","id:  89<br />words:  70","id:  90<br />words:  63","id:  91<br />words:  55","id:  92<br />words:   6","id:  93<br />words:  25","id:  94<br />words: 644","id:  95<br />words: 120","id:  96<br />words:  15","id:  97<br />words:  48","id:  98<br />words:   0","id:  99<br />words:  16","id: 100<br />words: 105","id: 101<br />words: 201","id: 102<br />words:  22","id: 103<br />words:  44","id: 104<br />words: 167","id: 105<br />words:  95","id: 106<br />words:  26","id: 107<br />words:  12","id: 108<br />words: 126","id: 109<br />words:  15","id: 110<br />words:  15","id: 111<br />words:  15","id: 112<br />words:  19","id: 113<br />words:  74","id: 114<br />words:  42","id: 115<br />words:  12","id: 116<br />words:  39","id: 117<br />words:  28","id: 118<br />words:   6","id: 119<br />words: 269","id: 120<br />words:  33","id: 121<br />words: 216","id: 122<br />words: 401","id: 123<br />words:  24","id: 124<br />words:  57","id: 125<br />words:  56","id: 126<br />words:  48","id: 127<br />words:   9","id: 128<br />words:   7","id: 129<br />words:   0","id: 130<br />words:  35","id: 131<br />words:  21","id: 132<br />words:  47","id: 133<br />words:  76","id: 134<br />words: 138","id: 135<br />words: 227","id: 136<br />words:  74","id: 137<br />words: 400","id: 138<br />words:  60","id: 139<br />words: 339","id: 140<br />words: 109","id: 141<br />words:  83","id: 142<br />words:  83","id: 143<br />words: 246","id: 144<br />words:  56","id: 145<br />words:  18","id: 146<br />words:  53","id: 147<br />words:  23","id: 148<br />words:  19","id: 149<br />words:  31","id: 150<br />words:   7","id: 151<br />words:  13","id: 152<br />words:  30","id: 153<br />words:  19","id: 154<br />words: 528","id: 155<br />words: 249","id: 156<br />words: 272","id: 157<br />words: 391","id: 158<br />words: 115","id: 159<br />words:  29","id: 160<br />words:   5","id: 161<br />words:  42","id: 162<br />words:  26","id: 163<br />words:  47","id: 164<br />words:  48","id: 165<br />words:  48","id: 166<br />words:  90","id: 167<br />words: 101","id: 168<br />words:  70","id: 169<br />words:  98","id: 170<br />words:  85","id: 171<br />words: 140","id: 172<br />words:  24","id: 173<br />words:  57","id: 174<br />words:  23","id: 175<br />words: 120","id: 176<br />words:  10","id: 177<br />words:  25","id: 178<br />words:  17","id: 179<br />words:  30","id: 180<br />words:  21","id: 181<br />words:  19","id: 182<br />words:  47","id: 183<br />words: 132","id: 184<br />words:  31","id: 185<br />words:  38","id: 186<br />words:  35","id: 187<br />words:  16","id: 188<br />words:  15","id: 189<br />words:   8","id: 190<br />words:  39","id: 191<br />words:  43","id: 192<br />words:  17","id: 193<br />words:   0","id: 194<br />words:  16","id: 195<br />words:  49","id: 196<br />words:  13","id: 197<br />words:  10","id: 198<br />words: 480","id: 199<br />words: 299","id: 200<br />words:  22","id: 201<br />words:  15","id: 202<br />words:  59","id: 203<br />words:  20","id: 204<br />words:  27","id: 205<br />words:  39","id: 206<br />words:  27","id: 207<br />words:  34","id: 208<br />words:  20","id: 209<br />words:  43","id: 210<br />words:  41","id: 211<br />words:  29","id: 212<br />words:   3","id: 213<br />words:  11","id: 214<br />words:   0","id: 215<br />words: 379","id: 216<br />words:   4","id: 217<br />words:  10","id: 218<br />words:  30","id: 219<br />words:  64","id: 220<br />words:   4","id: 221<br />words:  20","id: 222<br />words: 169","id: 223<br />words: 195","id: 224<br />words:  50","id: 225<br />words: 200","id: 226<br />words:  56","id: 227<br />words:   6","id: 228<br />words:  64","id: 229<br />words: 336","id: 230<br />words: 246","id: 231<br />words:  51","id: 232<br />words:  15","id: 233<br />words:  42","id: 234<br />words:  48","id: 235<br />words:  16","id: 236<br />words:  97","id: 237<br />words: 123","id: 238<br />words:  11","id: 239<br />words:   0","id: 240<br />words:  21","id: 241<br />words:  17","id: 242<br />words:  13","id: 243<br />words:  17","id: 244<br />words:   0","id: 245<br />words:   6","id: 246<br />words:   6","id: 247<br />words:  42","id: 248<br />words:  23","id: 249<br />words: 155","id: 250<br />words:  23","id: 251<br />words:  59","id: 252<br />words: 117","id: 253<br />words: 253","id: 254<br />words:  21","id: 255<br />words:  15","id: 256<br />words:   8","id: 257<br />words:  39","id: 258<br />words:   3","id: 259<br />words:  12","id: 260<br />words:  12","id: 261<br />words:  25","id: 262<br />words:   6","id: 263<br />words: 150","id: 264<br />words: 544","id: 265<br />words:  19","id: 266<br />words:   5","id: 267<br />words:   5","id: 268<br />words:   7"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,115,194,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":45.5653205242246,"r":7.30593607305936,"b":42.7824230563957,"l":46.027397260274},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022},"title":{"text":"Número de palabras pronunciadas por bebés","font":{"color":"rgba(0,0,0,1)","family":"sans","size":19.1282689912827},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-12.35,281.35],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Id. del bebé","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-32.2,676.2],"tickmode":"array","ticktext":["0","200","400","600"],"tickvals":[0,200,400,600],"categoryorder":"array","categoryarray":["0","200","400","600"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(216,216,216,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Frecuencia","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":12.7521793275218}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"5a141f6065be":{"x":{},"y":{},"type":"scatter"}},"cur_data":"5a141f6065be","visdat":{"5a141f6065be":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+---
+## Base
+
+
+```r
+freq &lt;- numberofwords %&gt;% group_by(age, gender) %&gt;% summarise(n = sum(words)) 
+barplot(n ~ gender + age, data = freq, beside = T, col = c("#608941","#416089"), legend = levels(factor(freq$gender)), args.legend  = list(x = "topleft", inset = 0.01))
+```
+
+.center[
+![](modulo3---parte3_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+---
+## Ggplot
+
+
+
+```r
+freq %&gt;%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge")
+```
+
+.center[
+![](modulo3---parte3_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+---
+
+
+### Enlaces
+
+* [scale_fill_manual](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
+
+
+---
+
+
+```r
+freq %&gt;%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089"),
+                    labels = c("Niña", "Niño"),
+                    name = "Sexo") +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+```
+---
+class: center, middle
+![](modulo3---parte3_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+---
+
+## Plotly
+
+
+```r
+miplotly &lt;- freq %&gt;%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089"),
+                    labels = c("Niña", "Niño"),
+                    name = "Sexo") +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+
+ggplotly(miplotly)
+```
+
+---
+class: center, middle
+<div id="htmlwidget-8e4665cbfb8310bd1c84" style="width:720px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8e4665cbfb8310bd1c84">{"x":{"data":[{"orientation":"v","width":[0.45,0.45,0.45],"base":[0,0,0],"x":[0.775,1.775,2.775],"y":[1393,2887,6070],"text":["factor(age): 16<br />n: 1393<br />gender: female","factor(age): 18<br />n: 2887<br />gender: female","factor(age): 20<br />n: 6070<br />gender: female"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(96,137,65,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"female","legendgroup":"female","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.45,0.45,0.45],"base":[0,0,0],"x":[1.225,2.225,3.225],"y":[1341,3016,5737],"text":["factor(age): 16<br />n: 1341<br />gender: male","factor(age): 18<br />n: 3016<br />gender: male","factor(age): 20<br />n: 5737<br />gender: male"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(65,96,137,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"male","legendgroup":"male","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":45.5653205242246,"r":7.30593607305936,"b":42.7824230563957,"l":52.4034869240349},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022},"title":{"text":"Número de palabras pronunciadas por bebés","font":{"color":"rgba(0,0,0,1)","family":"sans","size":19.1282689912827},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["16","18","20"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["16","18","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Edad","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-303.5,6373.5],"tickmode":"array","ticktext":["0","2000","4000","6000"],"tickvals":[0,2000,4000,6000],"categoryorder":"array","categoryarray":["0","2000","4000","6000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(216,216,216,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Frecuencia","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":12.7521793275218},"title":{"text":"Sexo","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"5a14501325c8":{"x":{},"y":{},"fill":{},"type":"bar"}},"cur_data":"5a14501325c8","visdat":{"5a14501325c8":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+---
+## Modificando la base de datos
+
+
+```r
+miplotly_mod &lt;- freq %&gt;%
+  ungroup() %&gt;% 
+  mutate(Sexo = factor(gender, labels = c("Niña", "Niño")),
+         Edad = factor(age)) %&gt;% 
+  select(Edad, Sexo, n) %&gt;%  
+ggplot(aes(x = Edad, y = n, fill = Sexo)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089")) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+  
+ggplotly(miplotly_mod)
+```
+---
+class: center, middle
+
+
+<div id="htmlwidget-dfca30b211046de48af3" style="width:720px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dfca30b211046de48af3">{"x":{"data":[{"orientation":"v","width":[0.45,0.45,0.45],"base":[0,0,0],"x":[0.775,1.775,2.775],"y":[1393,2887,6070],"text":["Edad: 16<br />n: 1393<br />Sexo: Niña","Edad: 18<br />n: 2887<br />Sexo: Niña","Edad: 20<br />n: 6070<br />Sexo: Niña"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(96,137,65,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Niña","legendgroup":"Niña","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.45,0.45,0.45],"base":[0,0,0],"x":[1.225,2.225,3.225],"y":[1341,3016,5737],"text":["Edad: 16<br />n: 1341<br />Sexo: Niño","Edad: 18<br />n: 3016<br />Sexo: Niño","Edad: 20<br />n: 5737<br />Sexo: Niño"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(65,96,137,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Niño","legendgroup":"Niño","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":45.5653205242246,"r":7.30593607305936,"b":42.7824230563957,"l":52.4034869240349},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022},"title":{"text":"Número de palabras pronunciadas por bebés","font":{"color":"rgba(0,0,0,1)","family":"sans","size":19.1282689912827},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["16","18","20"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["16","18","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Edad","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-303.5,6373.5],"tickmode":"array","ticktext":["0","2000","4000","6000"],"tickvals":[0,2000,4000,6000],"categoryorder":"array","categoryarray":["0","2000","4000","6000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"sans","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(216,216,216,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Frecuencia","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"sans","size":12.7521793275218},"title":{"text":"Sexo","font":{"color":"rgba(0,0,0,1)","family":"sans","size":15.9402241594022}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"5a1430fa2f2b":{"x":{},"y":{},"fill":{},"type":"bar"}},"cur_data":"5a1430fa2f2b","visdat":{"5a1430fa2f2b":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+## Mediante comandos Plotly
+
+
+```r
+library(tidyr)
+freq_plotly &lt;- freq %&gt;% 
+  pivot_wider(names_from = "gender", values_from = "n")
+
+fig &lt;- plot_ly(freq_plotly, x = ~ age, y = ~female, type = 'bar', name = 'Niña')
+fig &lt;- fig %&gt;% add_trace(y = ~male, name = 'Niño')
+fig &lt;- fig %&gt;% layout(yaxis = list(title = 'Frecuencia'), barmode = 'group')
+```
+---
+class: center, middle
+<div id="htmlwidget-30cd2d60582702296f42" style="width:720px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-30cd2d60582702296f42">{"x":{"visdat":{"5a144be745c6":["function () ","plotlyVisDat"]},"cur_data":"5a144be745c6","attrs":{"5a144be745c6":{"x":{},"y":{},"marker":{"color":"#608941"},"name":"Niña","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"5a144be745c6.1":{"x":{},"y":{},"marker":{"color":"#416089"},"name":"Niño","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"Frecuencia"},"barmode":"group","xaxis":{"domain":[0,1],"automargin":true,"title":"age"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[16,18,20],"y":[1393,2887,6070],"marker":{"color":"#608941","line":{"color":"rgba(31,119,180,1)"}},"name":"Niña","type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[16,18,20],"y":[1341,3016,5737],"marker":{"color":"#416089","line":{"color":"rgba(255,127,14,1)"}},"name":"Niño","type":"bar","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+---
+
+class: center, middle
+
+## Guardar los gráficos `plotly`
+
+---
+
+
+
+
+```r
+# install.packages("htmlwidgets")
+
+htmlwidgets::saveWidget(fig, "img/grafico_plotly.html")
+```
+---
+
+class: center, middle, inverse
+name: rmarkdown
+
+# Generación de informes
+
+---
+
+## Rmarkdown 
+
+
+&gt; La librería [**rmarkdown**](https://rmarkdown.rstudio.com/index.html) es una herramienta para la creación de documentos dinámicos y reproducibles que combinan código, resultados renderizados (como figuras) y texto.
+
+.center[![logormarkdown](https://github.com/rstudio/rmarkdown/blob/main/man/figures/logo.png?raw=true)]
+
+---
+
+## *Outputs* Rmarkdown 
+.pull-left[
+Los documentos de R Markdown se pueden tener muchos formatos de salida, incluidos documentos HTML <svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:darkorange;overflow:visible;position:relative;"><path d="M0 32l34.9 395.8L191.5 480l157.6-52.2L384 32H0zm308.2 127.9H124.4l4.1 49.4h175.6l-13.6 148.4-97.9 27v.3h-1.1l-98.7-27.3-6-75.8h47.7L138 320l53.5 14.5 53.7-14.5 6-62.2H84.3L71.5 112.2h241.1l-4.4 47.7z"/></svg>, PDF <svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:red;overflow:visible;position:relative;"><path d="M88 304H80V256H88C101.3 256 112 266.7 112 280C112 293.3 101.3 304 88 304zM192 256H200C208.8 256 216 263.2 216 272V336C216 344.8 208.8 352 200 352H192V256zM224 0V128C224 145.7 238.3 160 256 160H384V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V64C0 28.65 28.65 0 64 0H224zM64 224C55.16 224 48 231.2 48 240V368C48 376.8 55.16 384 64 384C72.84 384 80 376.8 80 368V336H88C118.9 336 144 310.9 144 280C144 249.1 118.9 224 88 224H64zM160 368C160 376.8 167.2 384 176 384H200C226.5 384 248 362.5 248 336V272C248 245.5 226.5 224 200 224H176C167.2 224 160 231.2 160 240V368zM288 224C279.2 224 272 231.2 272 240V368C272 376.8 279.2 384 288 384C296.8 384 304 376.8 304 368V320H336C344.8 320 352 312.8 352 304C352 295.2 344.8 288 336 288H304V256H336C344.8 256 352 248.8 352 240C352 231.2 344.8 224 336 224H288zM256 0L384 128H256V0z"/></svg>, Word <svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:blue;overflow:visible;position:relative;"><path d="M224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM281.5 240h23.37c7.717 0 13.43 7.18 11.69 14.7l-42.46 184C272.9 444.1 268 448 262.5 448h-29.26c-5.426 0-10.18-3.641-11.59-8.883L192 329.1l-29.61 109.1C160.1 444.4 156.2 448 150.8 448H121.5c-5.588 0-10.44-3.859-11.69-9.305l-42.46-184C65.66 247.2 71.37 240 79.08 240h23.37c5.588 0 10.44 3.859 11.69 9.301L137.8 352L165.6 248.9C167 243.6 171.8 240 177.2 240h29.61c5.426 0 10.18 3.641 11.59 8.883L246.2 352l23.7-102.7C271.1 243.9 275.1 240 281.5 240zM256 0v128h128L256 0z"/></svg>, presentaciones de diapositivas <svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:darkorange;overflow:visible;position:relative;"><path d="M256 0v128h128L256 0zM224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM279.6 308.1C284.2 353.5 248.5 392 204 392H160v40C160 440.8 152.8 448 144 448H128c-8.836 0-16-7.164-16-16V256c0-8.836 7.164-16 16-16h71.51C239.3 240 275.6 268.5 279.6 308.1zM160 344h44c15.44 0 28-12.56 28-28S219.4 288 204 288H160V344z"/></svg> entre otros formatos. Esto permite centrase en el contenido mientras R Markdown se encarga de su formato.
+]
+
+.pull-right[![salidasrmarkdown](https://d33wubrfki0l68.cloudfront.net/aee91187a9c6811a802ddc524c3271302893a149/a7003/images/bandthree2.png)]
+
+---
+## ¿Cómo funciona Rmarkdown?
+
+- **Markdown**: Es el lenguaje que permite escribir documentos en texto plano y que posteriormente será convertidos a otros formatos. No es exclusivo de R. Los ficheros *markdown* tienen extensión **.md**.
+
+- **Rmarkdown**: Es una variación del anterior exclusivo para R. Permite el *incrustado* de código R. Los ficheros *rmarkdown* tienen extensión ***.Rmd*
+
+- **La librería rmarkdown**: Contiene el código para convetir (renderizar) el fichero `.Rmd` en el formato deseado.
+
+- **Knitr**: Es la librería encargada de pasar el fichero `.Rmd` en un fichero `.md`. Ejecuta los códigos.
+
+- **Pandoc**: Es el software encargado de *'traducir'* el fichero `.md` en el documento con el formato requerido: Word, PDF, HTML, etc...
+
+
+.center[
+![flujormarkdown](https://d33wubrfki0l68.cloudfront.net/61d189fd9cdf955058415d3e1b28dd60e1bd7c9b/9791d/images/rmarkdownflow.png)]
+
+---
+
+## Creación de un fichero Rmarkdown
+
+1. A través de los menús *File &gt; New File &gt; R Markdown*
+
+2. En la ventana de configuración del fichero se le añadiría:
+
+    - Título del documento *(opcional pero recomendado)*.
+    
+    - Autor del documento *(opcional pero recomendado)*.
+    
+    - Formato de salida.
+
+
+.footnote[[Cheatsheet Rmarkdown](https://raw.githubusercontent.com/rstudio/cheatsheets/main/rmarkdown.pdf)]    
+---
+
+# Componentes fichero Rmarkdown
+
+![](https://epirhandbook.com/en/images/markdown/2_defaultRMD.png)
+.tiny[Fuente: [The Epidemiologist R Handbook](https://epirhandbook.com/en/index.html)]
+
+---
+
+![](https://epirhandbook.com/en/images/markdown/rmarkdown_translation.png)
+.tiny[Fuente: [The Epidemiologist R Handbook](https://epirhandbook.com/en/index.html)]
+
+---
+## Markdown
+
+### Encabezados
+
+Una almohadilla # antes del texto indica que se trata de un encabezado. Los niveles del encabezado se determinan por el número de almohadillas. 
+
+
+```r
+# Encabezado de nivel 1
+
+## Encabezado de nivel 2
+
+### Encabezado de nivel 3
+```
+
+# Encabezado de nivel 1
+
+## Encabezado de nivel 2
+
+### Encabezado de nivel 3
+
+---
+
+## Markdown
+
+### Listas no ordenadas
+
+En este caso se precede del texto con \*, + o -. Si queremos unsubnivel debemos introducir 4 espacios o un tabulador antes del \*, +, o -. 
+
+***
+```
+- Lista no ordenada
+
+- Segundo elemento de la lista
+
+    - Subnivel del segundo elemento
+
+```
+***
+* Lista no ordenada
+
+- Segundo elemento de la lista
+
+    - Subnivel del segundo elemento
+
+---
+
+## Markdown
+
+### Listas ordenadas
+
+En este caso se precede del texto con un número y . o ). Si queremos unsubnivel debemos introducir 4 espacios o un tabulador.
+
+***
+
+```
+1. Lista ordenada
+
+2. Segundo elemento de la lista
+
+    2.1. Subnivel del segundo elemento
+
+```
+***
+1. Lista no ordenada
+
+2. Segundo elemento de la lista
+
+    2.1. Subnivel del segundo elemento
+
+
+---
+
+## Markdown
+
+### Enlaces
+
+`[texto](enlace)`
+
+`[Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es)`
+
+[Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es)
+
+---
+
+## Markdown
+
+### Imágenes
+
+`![texto sustitutivo](enlace)`
+
+`![Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es/php/wp-content/uploads/Logo_ESSSCAN_opt.jpg)`
+
+![Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es/php/wp-content/uploads/Logo_ESSSCAN_opt.jpg)
+
+---
+
+## Markdown
+
+### Fomato de texto
+
+                                                        
+
+- *Itálica*. `*Itálica*` o `_Itálica_`
+
+- **Negrita**. `**Negrita**`
+
+- ***Negrita e itálica***. `***Negrita e itálica***`
+
+
+
+---
+
+## RMarkdown
+
+### Código R
+
+- Blóque de código
+````
+```{r}
+# Bloque de código
+```
+````
+
+- `Ctrl` + `Alt` + `i`
+- Mediante le icono ![](https://d33wubrfki0l68.cloudfront.net/b8b19518e688e3ca1390e0a1588916f04908d33f/8a4dc/images/notebook-insert-chunk.png) en la barra del editor
+---
+
+.pull-left[
+
+````default
+---
+title: "Apuntes del curso de R"
+author: "Christian González &amp; Jaime Pinilla"
+date: "2022-11-02"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Día 1
+
+* Introducción
+* Principios básicos de R **Importante:** Crear proyecto 
+   * Instalación
+   * Vectores
+   * Etc...
+   
+## Día 2
+* Importar
+
+```{r}
+numberofwords &lt;- readr::read_csv("../Modulo 2/numberofwords.csv")
+head(numerofwords)
+```
+
+---
+````
+]
+
+.pull-right[
+
+````default
+## Día 3
+* Graficar
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggthemes)
+numberofwords %&gt;%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+
+```
+
+
+[Transparencias](https://github.com/chrglez/slidescursoessscan) 
+````
+]
+---
+
+## Parámetros en los bloques de código
+
+- El primer parámetro es el lenguaje del código. En nuestro caso `r`
+
+- El segundo es opcional y es el nombre del bloque
+
+- `eval = FALSE` no ejecuta el código
+
+- `echo = FALSE` no muestra el código
+
+- `result = FALSE` no muestra el resultado
+
+- `warning = FALSE` no muestra los warnings que se produzcan al ejecutar el código
+
+- `message = FALSE` no muestra los mensajes que se produzcan al ejecutar el código
+
+- `include = FALSE` equivale a `echo = FALSE`, `result = FALSE`, `warning = FALSE`, `message = FALSE`
+
+- `fig.height`, `fig.width` alto y ancho de las figuras en caso de que el código las genere
+
+
+---
+
+### Tablas
+
+La salidas de las tablas proporcionadas por R para el documento se producen sin formato, como si fuera a consola. Son poco amigables. Para dar formato existen diefrerentes librerías.
+
+- [xtable](https://cran.r-project.org/web/packages/xtable/index.html)
+
+- [stargazer](https://cran.r-project.org/web/packages/stargazer/index.html)
+
+- [pander](https://cran.r-project.org/web/packages/pander/index.html)
+
+- [tables](https://cran.r-project.org/web/packages/tables/index.html)
+
+- [knitr](https://cran.r-project.org/web/packages/knitr/index.html) con su complemento [kableExtra](https://cran.r-project.org/web/packages/kableExtra/index.html)
+
+***
+
+````
+```{r}
+knitr::kable(head(numberofwords))
+```
+````
+
+---
+
+## Trabajar con PDF
+
+- Se necesita trabajar con un compilador [`LaTeX`](https://es.wikipedia.org/wiki/LaTeX).
+
+- La forma más sencilla de instalar ese compilador es a través de la librería [`tinytex`](https://yihui.org/tinytex/)
+
+
+```r
+install.packages('tinytex')
+
+tinytex::install_tinytex()
+```
+
+- Ya se podría usar el formato de salida PDF cambiando `output: pdf_document` en el YALM.
+
+
+---
+background-image: url("https://i.gifer.com/4KPr.gif")
+background-size: cover
+
+---
+background-image: url("https://media.giphy.com/media/Ld77zD3fF3Run8olIt/giphy.gif")
+background-size: cover
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../Modulo 1/js/ru_xaringan.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": false,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

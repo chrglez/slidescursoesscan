@@ -1,0 +1,706 @@
+---
+title: "Analisis gráfico con R"
+subtitle: "Gráficos con R base"
+
+author: "Jaime Pinilla - C. González-Martel"
+date: "27/10/2022"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    lib_dir: libs
+    css: ["rutgers", "rutgers-fonts", "custom.css"]
+    nature:
+      beforeInit: "../Modulo 1/js/ru_xaringan.js"
+      highlightStyle: github
+      highlightLines: false
+      countIncrementalSlides: false
+      ratio: "16:9"
+
+    includes:
+      in_header: "header.html"
+
+---
+
+# Análisis gráfico con R
+
+
+1. [Gráficos interactivos con R.](#plotly)
+
+2. [Generación de informes.](#rmarkdown)
+
+3. [Encuesta europea de Salud en España](#EESE)
+
+
+---
+
+
+class:  inverse, center, middle
+name: plotly
+
+# Gráficos interactivos con R.
+
+---
+
+> [**Ggplot**](https://ggplot2.tidyverse.org/) es una librería de R integrada dentro de `tidyverse` para la generación de gráficos estáticos complejos utilizando los principios de la gramática de gráficos de *Leland Wilkinson*.  
+
+.center[![The Grammar of Graphics](https://m.media-amazon.com/images/P/0387245448.01._SCLZZZZZZZ_SX500_.jpg)]
+
+---
+
+> [**Plotly**](https://plotly.com/r/) es una librería de código abierto en R y se basa en el *framework* de JavaScript con el mismo nombre, plotly.js. El paquete Plotly ayuda a crear gráficos interactivos e intuitivos. También brinda la posibilidad de incrustar estos gráficos en páginas web guardarlos en sus computadoras. Se usa ampliamente junto con el paquete ggplot para hacer visualizaciones complejas, atractivas e interactivas para el usuario.
+
+.center[![Plotly](https://upload.wikimedia.org/wikipedia/commons/8/8a/Plotly-logo.png)]
+
+
+---
+## Base
+
+```{r, eval = F, message=FALSE}
+numberofwords <- readr::read_csv("../Modulo 2/numberofwords.csv")
+plot(numberofwords$words, ylab = "Frecuencia", xlab = "Id. del bebé", main = "Número de palabras pronunciadas por bebés", sub = "Fichero: numberofwords.csv", pch = 21, bg = "#0073C2FF", col = "black", cex = 1.5, lwd = 0.9, frame = FALSE)
+```
+
+.center[
+```{r, echo = FALSE, message=FALSE,fig.height=5, fig.width=7}
+numberofwords <- readr::read_csv("../Modulo 2/numberofwords.csv")
+plot(numberofwords$words, ylab = "Frecuencia", xlab = "Id. del bebé", main = "Número de palabras pronunciadas por bebés", sub = "Fichero: numberofwords.csv", pch = 21, bg = "#0073C2FF", col = "black", cex = 1.5, lwd = 0.9, frame = FALSE)
+```
+
+]
+
+---
+
+```{r, message=FALSE, eval = FALSE}
+library(dplyr)
+library(ggplot2)
+numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point()
+```
+
+.center[
+```{r, message=FALSE, echo = FALSE, fig.height=5, fig.width=7}
+library(dplyr)
+library(ggplot2)
+numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point()
+```
+]
+---
+
+### Enlaces
+
+* [geom_point](https://ggplot2.tidyverse.org/reference/geom_point.html)
+
+* [labs](https://ggplot2.tidyverse.org/reference/geom_point.html)
+
+* [themes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
+* [ggthemes](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
+
+---
+
+
+
+```{r, eval = FALSE, message=FALSE}
+
+library(ggthemes)
+numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+  
+  
+```
+
+
+---
+class: center, middle
+```{r, echo=FALSE, message=FALSE,fig.height=7, fig.width=10}
+# install.packages("ggthemes")
+library(ggthemes)
+numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+```
+
+---
+# Plotly
+
+
+```{r, eval = FALSE, message=FALSE}
+
+# install.packages("plotly")
+library(plotly)
+
+migrafico <- numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+
+ggplotly(migrafico)
+
+```
+
+---
+class: center, middle
+
+
+```{r, echo = FALSE, message=FALSE,fig.height=7, fig.width=10}
+
+# install.packages("plotly")
+library(plotly)
+
+migrafico <- numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+
+ggplotly(migrafico)
+
+```
+
+---
+## Base
+
+```{r, eval = FALSE, message = FALSE}
+freq <- numberofwords %>% group_by(age, gender) %>% summarise(n = sum(words)) 
+barplot(n ~ gender + age, data = freq, beside = T, col = c("#608941","#416089"), legend = levels(factor(freq$gender)), args.legend  = list(x = "topleft", inset = 0.01))
+```
+
+.center[
+```{r, echo = FALSE, message = FALSE, fig.height=5, fig.width=7}
+freq <- numberofwords %>% group_by(age, gender) %>% summarise(n = sum(words)) 
+barplot(n ~ gender + age, data = freq, beside = T, col = c("#608941","#416089"), legend = levels(factor(freq$gender)), args.legend  = list(x = "topleft", inset = 0.01))
+```
+]
+---
+## Ggplot
+
+
+```{r, eval = FALSE}
+freq %>%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge")
+```
+
+.center[
+```{r, echo = FALSE, message = FALSE, fig.height=5, fig.width=7}
+freq %>%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge")
+```
+]
+---
+
+
+### Enlaces
+
+* [scale_fill_manual](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
+
+
+---
+
+```{r, eval = FALSE}
+freq %>%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089"),
+                    labels = c("Niña", "Niño"),
+                    name = "Sexo") +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+```
+---
+class: center, middle
+```{r, echo = FALSE, message = FALSE, fig.height=7, fig.width=10}
+freq %>%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089"),
+                    labels = c("Niña", "Niño"),
+                    name = "Sexo") +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+```
+---
+
+## Plotly
+
+```{r, eval = FALSE, message = FALSE}
+miplotly <- freq %>%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089"),
+                    labels = c("Niña", "Niño"),
+                    name = "Sexo") +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+
+ggplotly(miplotly)
+```
+
+---
+class: center, middle
+```{r, echo = FALSE, message = FALSE, fig.height=7, fig.width=10}
+miplotly <- freq %>%  
+ggplot(aes(x = factor(age), y = n, fill = gender)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089"),
+                    labels = c("Niña", "Niño"),
+                    name = "Sexo") +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+
+ggplotly(miplotly)
+```
+
+---
+## Modificando la base de datos
+
+```{r eval = FALSE, message = FALSE}
+miplotly_mod <- freq %>%
+  ungroup() %>% 
+  mutate(Sexo = factor(gender, labels = c("Niña", "Niño")),
+         Edad = factor(age)) %>% 
+  select(Edad, Sexo, n) %>%  
+ggplot(aes(x = Edad, y = n, fill = Sexo)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089")) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+  
+ggplotly(miplotly_mod)
+  
+
+```
+---
+class: center, middle
+
+
+```{r echo = FALSE, message = FALSE,  fig.height=7, fig.width=10}
+miplotly_mod <- freq %>%
+  ungroup() %>% 
+  mutate(Sexo = factor(gender, labels = c("Niña", "Niño")),
+         Edad = factor(age)) %>% 
+  select(Edad, Sexo, n) %>%  
+ggplot(aes(x = Edad, y = n, fill = Sexo)) +
+         geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#608941","#416089")) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "según edad (meses) y sexo",
+       x = "Edad",
+       y = "Frecuencia") +
+  theme_hc()
+  
+ggplotly(miplotly_mod)
+  
+
+```
+
+---
+
+## Mediante comandos Plotly
+
+```{r, eval = FALSE, message = FALSE}
+library(tidyr)
+freq_plotly <- freq %>% 
+  pivot_wider(names_from = "gender", values_from = "n")
+
+fig <- plot_ly(freq_plotly, x = ~ age, y = ~female, type = 'bar', name = 'Niña')
+fig <- fig %>% add_trace(y = ~male, name = 'Niño')
+fig <- fig %>% layout(yaxis = list(title = 'Frecuencia'), barmode = 'group')
+
+```
+---
+class: center, middle
+```{r, echo = FALSE, message = FALSE, fig.height=7, fig.width=10}
+library(tidyr)
+freq_plotly <- freq %>% 
+  pivot_wider(names_from = "gender", values_from = "n")
+
+fig <- plot_ly(freq_plotly, x = ~ age, y = ~female, type = 'bar', name = 'Niña',
+                marker = list(color = "#608941"))
+fig <- fig %>% add_trace(y = ~male, name = 'Niño', marker = list(color = "#416089"))
+fig <- fig %>% layout(yaxis = list(title = 'Frecuencia'), barmode = 'group')
+fig
+```
+---
+
+class: center, middle
+
+## Guardar los gráficos `plotly`
+
+---
+
+
+
+```{r}
+# install.packages("htmlwidgets")
+
+htmlwidgets::saveWidget(fig, "img/grafico_plotly.html")
+
+```
+---
+
+class: center, middle, inverse
+name: rmarkdown
+
+# Generación de informes
+
+---
+
+## Rmarkdown 
+
+
+> La librería [**rmarkdown**](https://rmarkdown.rstudio.com/index.html) es una herramienta para la creación de documentos dinámicos y reproducibles que combinan código, resultados renderizados (como figuras) y texto.
+
+.center[![logormarkdown](https://github.com/rstudio/rmarkdown/blob/main/man/figures/logo.png?raw=true)]
+
+---
+
+## *Outputs* Rmarkdown 
+.pull-left[
+Los documentos de R Markdown se pueden tener muchos formatos de salida, incluidos documentos HTML `r fontawesome::fa("html5", fill = "darkorange")`, PDF `r fontawesome::fa("file-pdf", fill = "red")`, Word `r fontawesome::fa("file-word", fill = "blue")`, presentaciones de diapositivas `r fontawesome::fa("file-powerpoint", fill = "darkorange")` entre otros formatos. Esto permite centrase en el contenido mientras R Markdown se encarga de su formato.
+]
+
+.pull-right[![salidasrmarkdown](https://d33wubrfki0l68.cloudfront.net/aee91187a9c6811a802ddc524c3271302893a149/a7003/images/bandthree2.png)]
+
+---
+## ¿Cómo funciona Rmarkdown?
+
+- **Markdown**: Es el lenguaje que permite escribir documentos en texto plano y que posteriormente será convertidos a otros formatos. No es exclusivo de R. Los ficheros *markdown* tienen extensión **.md**.
+
+- **Rmarkdown**: Es una variación del anterior exclusivo para R. Permite el *incrustado* de código R. Los ficheros *rmarkdown* tienen extensión ***.Rmd*
+
+- **La librería rmarkdown**: Contiene el código para convetir (renderizar) el fichero `.Rmd` en el formato deseado.
+
+- **Knitr**: Es la librería encargada de pasar el fichero `.Rmd` en un fichero `.md`. Ejecuta los códigos.
+
+- **Pandoc**: Es el software encargado de *'traducir'* el fichero `.md` en el documento con el formato requerido: Word, PDF, HTML, etc...
+
+
+.center[
+![flujormarkdown](https://d33wubrfki0l68.cloudfront.net/61d189fd9cdf955058415d3e1b28dd60e1bd7c9b/9791d/images/rmarkdownflow.png)]
+
+---
+
+## Creación de un fichero Rmarkdown
+
+1. A través de los menús *File > New File > R Markdown*
+
+2. En la ventana de configuración del fichero se le añadiría:
+
+    - Título del documento *(opcional pero recomendado)*.
+    
+    - Autor del documento *(opcional pero recomendado)*.
+    
+    - Formato de salida.
+
+
+.footnote[[Cheatsheet Rmarkdown](https://raw.githubusercontent.com/rstudio/cheatsheets/main/rmarkdown.pdf)]    
+---
+
+# Componentes fichero Rmarkdown
+
+![](https://epirhandbook.com/en/images/markdown/2_defaultRMD.png)
+.tiny[Fuente: [The Epidemiologist R Handbook](https://epirhandbook.com/en/index.html)]
+
+---
+
+![](https://epirhandbook.com/en/images/markdown/rmarkdown_translation.png)
+.tiny[Fuente: [The Epidemiologist R Handbook](https://epirhandbook.com/en/index.html)]
+
+---
+## Markdown
+
+### Encabezados
+
+Una almohadilla # antes del texto indica que se trata de un encabezado. Los niveles del encabezado se determinan por el número de almohadillas. 
+
+```{r}
+# Encabezado de nivel 1
+
+## Encabezado de nivel 2
+
+### Encabezado de nivel 3
+
+```
+
+# Encabezado de nivel 1
+
+## Encabezado de nivel 2
+
+### Encabezado de nivel 3
+
+---
+
+## Markdown
+
+### Listas no ordenadas
+
+En este caso se precede del texto con \*, + o -. Si queremos unsubnivel debemos introducir 4 espacios o un tabulador antes del \*, +, o -. 
+
+***
+```
+- Lista no ordenada
+
+- Segundo elemento de la lista
+
+    - Subnivel del segundo elemento
+
+```
+***
+* Lista no ordenada
+
+- Segundo elemento de la lista
+
+    - Subnivel del segundo elemento
+
+---
+
+## Markdown
+
+### Listas ordenadas
+
+En este caso se precede del texto con un número y . o ). Si queremos unsubnivel debemos introducir 4 espacios o un tabulador.
+
+***
+
+```
+1. Lista ordenada
+
+2. Segundo elemento de la lista
+
+    2.1. Subnivel del segundo elemento
+
+```
+***
+1. Lista no ordenada
+
+2. Segundo elemento de la lista
+
+    2.1. Subnivel del segundo elemento
+
+
+---
+
+## Markdown
+
+### Enlaces
+
+`[texto](enlace)`
+
+`[Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es)`
+
+[Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es)
+
+---
+
+## Markdown
+
+### Imágenes
+
+`![texto sustitutivo](enlace)`
+
+`![Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es/php/wp-content/uploads/Logo_ESSSCAN_opt.jpg)`
+
+![Escuela de Servicios Sanitarios y Sociales de Canarias (ESSSCAN)](https://www.essscan.es/php/wp-content/uploads/Logo_ESSSCAN_opt.jpg)
+
+---
+
+## Markdown
+
+### Fomato de texto
+
+                                                        
+
+- *Itálica*. `*Itálica*` o `_Itálica_`
+
+- **Negrita**. `**Negrita**`
+
+- ***Negrita e itálica***. `***Negrita e itálica***`
+
+
+
+---
+
+## RMarkdown
+
+### Código R
+
+- Blóque de código
+````
+```{r}`r ''`
+# Bloque de código
+```
+````
+
+- `Ctrl` + `Alt` + `i`
+- Mediante le icono ![](https://d33wubrfki0l68.cloudfront.net/b8b19518e688e3ca1390e0a1588916f04908d33f/8a4dc/images/notebook-insert-chunk.png) en la barra del editor
+---
+
+.pull-left[
+````{verbatim}
+---
+title: "Apuntes del curso de R"
+author: "Christian González & Jaime Pinilla"
+date: "2022-11-02"
+output: word_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Día 1
+
+* Introducción
+* Principios básicos de R **Importante:** Crear proyecto 
+   * Instalación
+   * Vectores
+   * Etc...
+   
+## Día 2
+* Importar
+
+
+
+```{r}
+numberofwords <- readr::read_csv("../Modulo 2/numberofwords.csv")
+head(numerofwords)
+```
+
+---
+````
+]
+
+.pull-right[
+````{verbatim}
+## Día 3
+* Graficar
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggthemes)
+numberofwords %>%
+  ggplot(aes(x = id, y = words)) + 
+  geom_point(colour = "black", fill = "#0073C2FF", size = 1.5, shape = 21) +
+  labs(title = "Número de palabras pronunciadas por bebés",
+       subtitle = "Fichero: numberofwords.csv",
+       x = "Id. del bebé",
+       y = "Frecuencia") +
+  theme_hc()
+
+```
+
+
+[Transparencias](https://github.com/chrglez/slidescursoessscan) 
+````
+]
+---
+
+## Parámetros en los bloques de código
+
+- El primer parámetro es el lenguaje del código. En nuestro caso `r`
+
+- El segundo es opcional y es el nombre del bloque
+
+- `eval = FALSE` no ejecuta el código
+
+- `echo = FALSE` no muestra el código
+
+- `result = FALSE` no muestra el resultado
+
+- `warning = FALSE` no muestra los warnings que se produzcan al ejecutar el código
+
+- `message = FALSE` no muestra los mensajes que se produzcan al ejecutar el código
+
+- `include = FALSE` equivale a `echo = FALSE`, `result = FALSE`, `warning = FALSE`, `message = FALSE`
+
+- `fig.height`, `fig.width` alto y ancho de las figuras en caso de que el código las genere
+
+
+---
+
+### Tablas
+
+La salidas de las tablas proporcionadas por R para el documento se producen sin formato, como si fuera a consola. Son poco amigables. Para dar formato existen diefrerentes librerías.
+
+- [xtable](https://cran.r-project.org/web/packages/xtable/index.html)
+
+- [stargazer](https://cran.r-project.org/web/packages/stargazer/index.html)
+
+- [pander](https://cran.r-project.org/web/packages/pander/index.html)
+
+- [tables](https://cran.r-project.org/web/packages/tables/index.html)
+
+- [knitr](https://cran.r-project.org/web/packages/knitr/index.html) con su complemento [kableExtra](https://cran.r-project.org/web/packages/kableExtra/index.html)
+
+***
+
+````
+```{r}`r ''`
+knitr::kable(head(numberofwords))
+```
+````
+
+---
+
+## Trabajar con PDF
+
+- Se necesita trabajar con un compilador [`LaTeX`](https://es.wikipedia.org/wiki/LaTeX).
+
+- La forma más sencilla de instalar ese compilador es a través de la librería [`tinytex`](https://yihui.org/tinytex/)
+
+```{r eval=FALSE}
+install.packages('tinytex')
+
+tinytex::install_tinytex()
+```
+
+- Ya se podría usar el formato de salida PDF cambiando `output: pdf_document` en el YALM.
+
+
+---
+background-image: url("https://i.gifer.com/4KPr.gif")
+background-size: cover
+
+---
+background-image: url("https://media.giphy.com/media/Ld77zD3fF3Run8olIt/giphy.gif")
+background-size: cover
