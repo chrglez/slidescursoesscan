@@ -28,7 +28,6 @@ output:
 
 2. [Generación de informes.](#rmarkdown)
 
-3. [Encuesta europea de Salud en España](#EESE)
 
 
 ---
