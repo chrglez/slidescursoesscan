@@ -32,7 +32,4 @@ Para usar R, trabajaremos principalmente dentro del entorno GUI de [RStudio](htt
 
 
 
-https://rawcdn.githack.com/chrglez/slidescursoessscan/565a8b9b9ba86acc7a8aeb5f3ab9bd1d3b2be880/Modulo%203/modulo3---parte3.html
-
-
  Octubre 2022
