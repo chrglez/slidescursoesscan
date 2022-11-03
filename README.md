@@ -28,8 +28,8 @@ Para usar R, trabajaremos principalmente dentro del entorno GUI de [RStudio](htt
     - Introducción a `ggplot` ([PDF](https://github.com/chrglez/slidescursoessscan/blob/main/Modulo%203/Modulo3_ggplot.pdf))
     - Gráficos interactivos y realización de informes. ([HTML](https://rawcdn.githack.com/chrglez/slidescursoessscan/46339aae3f7a486a59da88fa4899e077356ec824/Modulo%203/modulo3.html))([PDF](https://github.com/chrglez/slidescursoessscan/blob/main/Modulo%203/modulo3.pdf))
     - Gráficos avanzados con `ggplot` ([PDF](https://github.com/chrglez/slidescursoessscan/blob/main/Modulo%203/Modulo3F.pdf))
-4. Aplicaciones de R en epidimiología.
 
+4. Aplicaciones de R en epidimiología.
 
 
  Octubre 2022
